@@ -1982,6 +1982,7 @@ body::before {
     }
 
  
+
     .game-stats { gap: 15px; padding: 10px 20px; }
     .stat-value { font-size: 18px; }
     .stat-label { font-size: 11px; }
@@ -2032,6 +2033,13 @@ body::before {
     .bg-icons i:nth-child(8) { top: 50% !important; left: 5% !important; }
     .bg-icons i:nth-child(9) { top: 75% !important; left: 60% !important; }
     .bg-icons i:nth-child(10){ top: 35% !important; left: 30% !important; }
+
+        /* Заголовок на странице Связь */
+    .hero-title {
+        font-size: 32px !important; /* Уменьшаем размер, чтобы влез в экран */
+        line-height: 1.2 !important; /* Делаем строки чуть плотнее */
+        padding: 0 15px; /* Добавляем отступы по бокам */
+    }
 }
 
 /* --- ОЧЕНЬ МАЛЕНЬКИЕ ТЕЛЕФОНЫ (до 480px) --- */
