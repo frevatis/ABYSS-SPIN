@@ -133,7 +133,6 @@ backToMenuBtn.addEventListener('click', (e) => {
     });
 });
 
-
 function drawWheel(list) {
     if (list.length === 0) { 
         wheel.style.background = 'rgba(17, 22, 44, 0.5)'; 
@@ -170,7 +169,7 @@ function drawWheel(list) {
         el.style.left = `${x}%`;
         el.style.top = `${y}%`;
         
-        // СДВИГ ВЛЕВО (на телефоне -25px, на ПК -10px)
+        // СДВИГ ВЛЕВО (на телефоне -55px, на ПК -10px)
         const shift = isMobile ? -55 : -10;
         el.style.transform = `translate(calc(-50% + ${shift}px), -50%)`;
         
@@ -221,8 +220,14 @@ spinBtn.addEventListener('click', () => {
     }, 50);
 
     setTimeout(() => {
-        const norm = currentRotation % 360; const sectorAngle = 360 / picked.length;
-        currentDemon = picked[Math.floor(((270 - norm + 360) % 360) / sectorAngle) % picked.length];
+        // ИСПРАВЛЕННЫЙ РАСЧЕТ
+        const norm = currentRotation % 360; 
+        const sectorAngle = 360 / picked.length;
+        
+        const pointerAngle = (270 - norm + 360) % 360;
+        const index = Math.floor(pointerAngle / sectorAngle) % picked.length;
+        
+        currentDemon = picked[index];
         
         let t = Math.floor(Number(currentDemon.Tier));
         if (t === 7) unlockAchievement('lucky_7', 'Счастливчик', 'Выбить Tier 7', 'fa-clover');
@@ -284,11 +289,9 @@ saveBtn.addEventListener('click', () => {
     wheel.style.transition = 'none'; currentRotation = 0; wheel.style.transform = 'rotate(0deg)';
 
     if (val >= 100) {
-        // --- ЗВУК ПОБЕДЫ ---
         soundWin.currentTime = 0; 
         soundWin.volume = 0.6; 
         soundWin.play().catch(e => {}); 
-        // -------------------
 
         unlockAchievement('win_100', 'Победитель', 'Пройти на 100%', 'fa-trophy');
         if (selectedCategory === 'easy') unlockAchievement('win_easy', 'Легкая победа', 'Пройти 100% на Easy', 'fa-check');
