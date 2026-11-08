@@ -2211,3 +2211,28 @@ body::before {
         margin-bottom: 15px !important;
     }
 }
+@media (max-width: 768px) {
+    /* Прижимаем экран рулетки к шапке */
+    #gameScreen {
+        padding-top: 120px !important; /* Уменьшаем отступ от шапки (было больше) */
+    }
+
+    /* Убираем лишний отступ у самого контейнера */
+    #gameScreen .container {
+        padding-top: 0px !important;
+    }
+
+    /* Сжимаем панель со скипами и целями */
+    .game-stats {
+        margin-top: 10px !important;
+        margin-bottom: 15px !important;
+        padding: 10px 15px !important;
+    }
+
+    /* Уменьшаем отступ у заголовка "Категория: ..." */
+    #currentCategoryTitle {
+        margin-top: 5px !important;
+        margin-bottom: 10px !important;
+        font-size: 20px !important;
+    }
+}
