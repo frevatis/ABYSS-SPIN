@@ -44,9 +44,8 @@
             </div>
         </div>
     </header>
-    <script src="global.js"></script>
 
-       <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ -->
+    <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ -->
     <div id="menuScreen" class="screen active">
         <div class="container">
             <div class="pod">
@@ -74,9 +73,9 @@
                 <!-- СЕКРЕТНАЯ КНОПКА -->
                 <button class="cat-btn secret-ninja-btn" id="ninjaBtn">Секрет?</button>
             </div>
-            </div>
         </div>
     </div>
+
     <!-- ЭКРАН 2: РУЛЕТКА -->
     <div id="gameScreen" class="screen">
         <div class="container">
@@ -112,7 +111,7 @@
                     <h3 id="resName">Название</h3>
                     <span class="res-tier" id="resTier">Tier: 0.00</span>
                 </div>
-                              <div class="res-info">
+                <div class="res-info">
                     <p>Создатель: <span id="resCreator">Автор</span></p>
                     <div class="id-wrapper">
                         <p>ID уровня: <span id="resId">123456</span></p>
@@ -122,13 +121,18 @@
                     </div>
                 </div>
                 <div class="res-actions">
-    <div class="progress-input">
-        <label id="goalLabel">Пройти минимум: 1%</label>
-       <input type="text" id="progressInput" placeholder="Например: 4">
-    </div>
-    <button id="skipBtn" class="btn-skip">Скип</button>
-    <button id="saveBtn" class="btn-save">Сохранить</button>
-</div>
+                    <div class="progress-input">
+                        <label id="goalLabel">Пройти минимум: 1%</label>
+                        <input type="text" id="progressInput" placeholder="Например: 4">
+                    </div>
+                    <!-- ВОТ ТУТ ДОБАВЛЕН БЛОК СКИПОВ -->
+                    <div class="res-skips-info" style="display: flex; align-items: center; gap: 5px; margin: 0 10px;">
+                        <span style="font-size: 14px; color: rgba(255,255,255,0.5);">Скипов:</span>
+                        <span id="resSkips" style="font-weight: 700; color: #ff6b6b;">5</span>
+                    </div>
+                    <button id="skipBtn" class="btn-skip">Скип</button>
+                    <button id="saveBtn" class="btn-save">Сохранить</button>
+                </div>
             </div>
 
             <!-- БЛОК ПРОШЛОГО ПРОГРЕССА -->
@@ -140,26 +144,26 @@
 
         </div>
     </div>
-       <!-- УНИВЕРСАЛЬНОЕ МОДАЛЬНОЕ ОКНО -->
+    
+    <!-- УНИВЕРСАЛЬНОЕ МОДАЛЬНОЕ ОКНО -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-box" id="modalBox">
             <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <h3 id="modalTitle">Заголовок</h3>
             <p id="modalText">Текст сообщения</p>
             
-            <!-- Кнопки для подтверждения выхода (по умолчанию скрыты) -->
             <div class="modal-actions" id="modalActions" style="display: none;">
                 <button id="modalCancelBtn" class="btn-cancel">Остаться</button>
                 <button id="modalConfirmBtn" class="btn-confirm">Выйти</button>
             </div>
 
-            <!-- Кнопка "Ок" для простых сообщений (по умолчанию скрыта) -->
             <div class="modal-actions" id="modalOkAction" style="display: none;">
                 <button id="modalOkBtn" class="btn-save" style="padding: 12px 40px; width: 100%;">Понятно</button>
             </div>
         </div>
     </div>
-        <!-- ОКНО ПОБЕДЫ -->
+    
+    <!-- ОКНО ПОБЕДЫ -->
     <div id="winModal" class="modal-overlay">
         <div class="modal-box" style="border-color: #ffd700; box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);">
             <div class="modal-icon" style="color: #ffd700; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));">
@@ -172,92 +176,66 @@
             </div>
         </div>
     </div>
+
     <footer class="footer">
-    <div class="footer-container">
-        <div class="footer-grid">
-            <!-- Колонка 1: лого + описание -->
-            <div class="footer-col">
-                <a href="index.html" class="footer-logo">
-                     <img src="img/Gemini_Generated_Image_upjgmjupjgmjupjg.jpg" alt="logo">
-                    <span>ABYSS SPIN</span>
-                </a>
-                <p class="footer-desc">
-                    Рулетка демонов Geometry Dash. 8500+ уровней из GDDL — от лёгких до хардкорных.
-                </p>
-                <div class="footer-social">
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
-                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="footer-logo">
+                         <img src="img/Gemini_Generated_Image_upjgmjupjgmjupjg.jpg" alt="logo">
+                        <span>ABYSS SPIN</span>
+                    </a>
+                    <p class="footer-desc">
+                        Рулетка демонов Geometry Dash. 8500+ уровней из GDDL — от лёгких до хардкорных.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Навигация</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fa-solid fa-chevron-right"></i> Главная</a></li>
+                        <li><a href="roulette.html"><i class="fa-solid fa-chevron-right"></i> Рулетка</a></li>
+                        <li><a href="how.html"><i class="fa-solid fa-chevron-right"></i> Как работает?</a></li>
+                        <li><a href="top.html"><i class="fa-solid fa-chevron-right"></i> Топ демонов</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Ресурсы</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://demonlist.org/classic" target="_blank"><i class="fa-solid fa-chevron-right"></i> Demonlist</a></li>
+                        <li><a href="https://gdladder.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDDL</a></li>
+                        <li><a href="https://gdbrowser.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDBrowser</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>О сайте</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> О проекте</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Связь</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Колонка 2: навигация -->
-            <div class="footer-col">
-                <h4>Навигация</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html"><i class="fa-solid fa-chevron-right"></i> Главная</a></li>
-                    <li><a href="roulette.html"><i class="fa-solid fa-chevron-right"></i> Рулетка</a></li>
-                    <li><a href="how.html"><i class="fa-solid fa-chevron-right"></i> Как работает?</a></li>
-                    <li><a href="top.html"><i class="fa-solid fa-chevron-right"></i> Топ демонов</a></li>
-                </ul>
-            </div>
-
-            <!-- Колонка 3: ресурсы -->
-            <div class="footer-col">
-                <h4>Ресурсы</h4>
-                <ul class="footer-links">
-                    <li><a href="https://demonlist.org/classic" target="_blank"><i class="fa-solid fa-chevron-right"></i> Demonlist</a></li>
-                    <li><a href="https://gdladder.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDDL</a></li>
-                    <li><a href="https://gdbrowser.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDBrowser</a></li>
-                </ul>
-            </div>
-
-            <!-- Колонка 4: инфо (не трогал) -->
-            <div class="footer-col">
-                <h4>О сайте</h4>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> О проекте</a></li>
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Связь</a></li>
-                </ul>
+            <div class="footer-bottom">
+                <p>© 2026 <span class="footer-brand">ABYSS SPIN</span>. Не связан с RobTop Games.</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Политика конфиденциальности</a>
+                    <span class="divider">·</span>
+                    <a href="terms.html">Условия использования</a>
+                </div>
             </div>
         </div>
+    </footer>
 
-        <!-- Нижняя линия -->
-        <div class="footer-bottom">
-            <p>© 2026 <span class="footer-brand">ABYSS SPIN</span>. Не связан с RobTop Games.</p>
-            <div class="footer-bottom-links">
-                <a href="privacy.html">Политика конфиденциальности</a>
-                <span class="divider">·</span>
-                <a href="terms.html">Условия использования</a>
-            </div>
-        </div>
-    </div>
-</footer>
-    <!-- Подключаем JS файл -->
-    <script src="script.js"></script>
+    <!-- Подключаем JS файлы (ТОЛЬКО ОДИН РАЗ) -->
     <script src="global.js"></script>
-    <script>// ==========================================
-// КОПИРОВАНИЕ ID
-// ==========================================
-if (copyIdBtn) {
-    copyIdBtn.addEventListener('click', () => {
-        const idText = resId.textContent; // Берем текст из span
-        
-        // Копируем в буфер обмена
-        navigator.clipboard.writeText(idText).then(() => {
-            // Меняем иконку на галочку
-            copyIdBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
-            copyIdBtn.classList.add('copied');
-            
-            // Возвращаем обратно через 2 секунды
-            setTimeout(() => {
-                copyIdBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-                copyIdBtn.classList.remove('copied');
-            }, 2000);
-        }).catch(err => {
-            console.error('Ошибка копирования: ', err);
-        });
-    });
-}</script>
+    <script src="script.js"></script>
 </body>
 </html>
