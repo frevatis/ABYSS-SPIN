@@ -146,31 +146,39 @@ function drawWheel(list) {
     
     wheel.querySelectorAll('.wheel-label').forEach(el => el.remove());
 
-    // Определяем размер экрана
     const isMobile = window.innerWidth <= 768;
-    
-    // На телефоне колесо 280px (радиус 140), на ПК 400px (радиус 200).
-    // Ставим текст ровно на 60% от радиуса (чтобы не прилипал к краю).
-    const distance = isMobile ? 70 : 100; 
-    const fontSize = isMobile ? '10px' : '13px';
 
     list.forEach((d, i) => {
         const angle = i * sectorAngle + sectorAngle / 2;
+        const rad = (angle - 90) * (Math.PI / 180); 
+        
+        const radiusPercent = 35; 
+        
+        const x = 50 + Math.cos(rad) * radiusPercent;
+        const y = 50 + Math.sin(rad) * radiusPercent;
+
         const el = document.createElement('div');
         el.className = 'wheel-label'; 
         
-        // Обрезаем длинные названия
         let shortName = d.Name;
-        if (shortName.length > 12) shortName = shortName.substring(0, 10) + '...';
+        const maxLen = isMobile ? 8 : 12;
+        if (shortName.length > maxLen) shortName = shortName.substring(0, maxLen - 2) + '...';
 
         el.textContent = shortName; 
         el.title = d.Name;
         
-        // Задаем размер шрифта прямо в JS
-        el.style.fontSize = fontSize;
+        el.style.left = `${x}%`;
+        el.style.top = `${y}%`;
         
-        // КЛАССИЧЕСКАЯ ФОРМУЛА (без процентов!)
-        el.style.transform = `rotate(${angle}deg) translate(${distance}px, -50%)`;
+        // СДВИГ ВЛЕВО (на телефоне -25px, на ПК -10px)
+        const shift = isMobile ? -55 : -10;
+        el.style.transform = `translate(calc(-50% + ${shift}px), -50%)`;
+        
+        if (isMobile) {
+            el.style.fontSize = '8px';
+        } else {
+            el.style.fontSize = '11px';
+        }
         
         wheel.appendChild(el);
     });
