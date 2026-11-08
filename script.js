@@ -68,14 +68,14 @@ function filterDemons(cat) {
         if (cat === 'extreme') return t > 20;
         if (cat === 'hardextreme') return t >= 27; 
     });
-}
+} // ВОТ ТУТ БЫЛА ПОТЕРЯНА СКОБКА
 
 function updateUI() {
     if (skipsText) skipsText.textContent = skipsLeft;
     if (bestText) bestText.textContent = personalBest + '%';
     if (targetText) targetText.textContent = currentTarget + '%';
     
-    // ОБНОВЛЯЕМ СКИПЫ В КАРТОЧКЕ РЕЗУЛЬТАТА
+    // Ищем элемент КАЖДЫЙ РАЗ, когда обновляем интерфейс
     const resSkips = document.getElementById('resSkips');
     if (resSkips) resSkips.textContent = skipsLeft;
 }
@@ -196,7 +196,7 @@ function showResult(demon) {
 }
 
 // ==========================================
-// КОПИРОВАНИЕ ID (ДОБАВЛЕНО СЮДА)
+// КОПИРОВАНИЕ ID
 // ==========================================
 const copyIdBtn = document.getElementById('copyIdBtn');
 if (copyIdBtn && resId) {
@@ -227,7 +227,6 @@ spinBtn.addEventListener('click', () => {
     const pool = filterDemons(selectedCategory);
     if (pool.length < 8) { isSpinning = false; spinBtn.disabled = false; return showMessage('Ошибка', 'Мало демонов!', 'fa-triangle-exclamation', '#ff6b6b'); }
     
-    // ТВОЙ НОВЫЙ СПОСОБ ВЫБОРА
     const picked = [...pool].sort(() => Math.random() - 0.5).slice(0, 8);
     const randomIndex = Math.floor(Math.random() * 8); 
     currentDemon = picked[randomIndex];
