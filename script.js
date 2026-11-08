@@ -97,11 +97,9 @@ modalOkBtn.addEventListener('click', () => customModal.classList.remove('show'))
 catBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
         if (btn.id === 'ninjaBtn') {
-            e.preventDefault();
-            e.stopPropagation();
+            e.preventDefault(); e.stopPropagation();
             unlockAchievement('sec_invisible', 'Ниндзя', 'Секретная кнопка в меню', 'fa-user-ninja');
-            btn.style.display = 'none'; 
-            return; 
+            btn.style.display = 'none'; return; 
         }
 
         selectedCategory = btn.dataset.cat; title.textContent = `Категория: ${btn.textContent}`;
@@ -133,6 +131,7 @@ backToMenuBtn.addEventListener('click', (e) => {
     });
 });
 
+
 function drawWheel(list) {
     if (list.length === 0) { 
         wheel.style.background = 'rgba(17, 22, 44, 0.5)'; 
@@ -151,14 +150,15 @@ function drawWheel(list) {
         const angle = i * sectorAngle + sectorAngle / 2;
         const rad = (angle - 90) * (Math.PI / 180); 
         
+        // Отодвигаем текст от центра
         const radiusPercent = 35; 
-        
         const x = 50 + Math.cos(rad) * radiusPercent;
         const y = 50 + Math.sin(rad) * radiusPercent;
 
         const el = document.createElement('div');
         el.className = 'wheel-label'; 
         
+        // Обрезаем длинные названия
         let shortName = d.Name;
         const maxLen = isMobile ? 8 : 12;
         if (shortName.length > maxLen) shortName = shortName.substring(0, maxLen - 2) + '...';
@@ -169,15 +169,21 @@ function drawWheel(list) {
         el.style.left = `${x}%`;
         el.style.top = `${y}%`;
         
-        // СДВИГ ВЛЕВО (на телефоне -55px, на ПК -10px)
-        const shift = isMobile ? -55 : -10;
-        el.style.transform = `translate(calc(-50% + ${shift}px), -50%)`;
+        // ЖЕСТКО ЗАДАЕМ СТИЛИ, ЧТОБЫ ТЕКСТ НЕ ВЫЛЕЗАЛ
+        el.style.position = 'absolute';
+        el.style.transform = `translate(-50%, -50%)`; // Ровно по центру точки
+        el.style.color = '#fff';
+        el.style.fontWeight = 'bold';
+        el.style.textShadow = '0 2px 4px rgba(0,0,0,1)';
+        el.style.textAlign = 'center';
         
-        if (isMobile) {
-            el.style.fontSize = '8px';
-        } else {
-            el.style.fontSize = '11px';
-        }
+        // Ограничиваем ширину, чтобы текст физически не мог вылезти на соседний сектор
+        el.style.maxWidth = isMobile ? '40px' : '60px'; 
+        el.style.whiteSpace = 'normal'; // Разрешаем перенос на новую строку, если не влезает
+        el.style.wordBreak = 'break-word';
+        el.style.lineHeight = '1.1';
+        
+        if (isMobile) { el.style.fontSize = '8px'; } else { el.style.fontSize = '10px'; }
         
         wheel.appendChild(el);
     });
@@ -195,6 +201,7 @@ spinBtn.addEventListener('click', () => {
     if (isSpinning || demons.length === 0) return;
     isSpinning = true; spinBtn.disabled = true; resultBlock.classList.remove('show'); 
 
+    // Счетчики
     let totalSpins = parseInt(localStorage.getItem('totalSpins')) || 0; totalSpins++; localStorage.setItem('totalSpins', totalSpins);
     if (totalSpins >= 1) unlockAchievement('total_spins_1', 'Первый спин', 'Крутить колесо', 'fa-dice');
     updateAchProgress('spin_10', totalSpins, 10, 'Азартный', 'Крутить 10 раз', 'fa-dice-d20');
@@ -204,31 +211,47 @@ spinBtn.addEventListener('click', () => {
 
     const pool = filterDemons(selectedCategory);
     if (pool.length < 8) { isSpinning = false; spinBtn.disabled = false; return showMessage('Ошибка', 'Мало демонов!', 'fa-triangle-exclamation', '#ff6b6b'); }
+    
     const picked = [...pool].sort(() => Math.random() - 0.5).slice(0, 8);
+    const randomIndex = Math.floor(Math.random() * 8); 
+    currentDemon = picked[randomIndex];
 
-    currentRotation = 0; wheel.style.transition = 'none'; wheel.style.transform = 'rotate(0deg)'; drawWheel(picked);
+    // Рисуем колесо (сбрасываем в 0)
+    currentRotation = 0; 
+    wheel.style.transition = 'none'; 
+    wheel.style.transform = 'rotate(0deg)'; 
+    drawWheel(picked);
 
-    // --- ЗВУК КОЛЕСА ---
+    // Звук
     soundWheel.currentTime = 0; 
     soundWheel.volume = 0.4;
     soundWheel.play().catch(e => {}); 
-    // -------------------
 
+    // --- ВОТ ИСПРАВЛЕННАЯ МАТЕМАТИКА ---
+    const sectorAngle = 360 / 8;
+    // Центр нужного сектора в системе conic-gradient (0 градусов = справа)
+    const sectorCenter = randomIndex * sectorAngle + (sectorAngle / 2);
+    
+    // Стрелка у нас на 12 часах (сверху). В системе conic-gradient это 270 градусов.
+    // Нам нужно повернуть колесо так, чтобы центр сектора встал на 270 градусов.
+    // Прибавляем 5 полных оборотов (1800), чтобы было красиво.
+   // Теперь математика идеальная: так как колесо начинается сверху, 
+// нам нужно просто крутить на 360 минус угол сектора.
+let targetDegrees = 1800 + (360 - sectorCenter);
+    
+    // Если вдруг получилось меньше 1800, добавляем 360, чтобы крутить по часовой
+    if (targetDegrees < 1800) targetDegrees += 360;
+
+    currentRotation = targetDegrees;
+
+    // Запускаем плавную крутку (БЕЗ телепорта в конце!)
     setTimeout(() => {
         wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
-        const extra = 1800 + Math.random() * 360; currentRotation += extra; wheel.style.transform = `rotate(${currentRotation}deg)`;
+        wheel.style.transform = `rotate(${targetDegrees}deg)`;
     }, 50);
 
+    // Показываем карточку (без изменения колеса)
     setTimeout(() => {
-        // ИСПРАВЛЕННЫЙ РАСЧЕТ
-        const norm = currentRotation % 360; 
-        const sectorAngle = 360 / picked.length;
-        
-        const pointerAngle = (270 - norm + 360) % 360;
-        const index = Math.floor(pointerAngle / sectorAngle) % picked.length;
-        
-        currentDemon = picked[index];
-        
         let t = Math.floor(Number(currentDemon.Tier));
         if (t === 7) unlockAchievement('lucky_7', 'Счастливчик', 'Выбить Tier 7', 'fa-clover');
         if (t >= 10) unlockAchievement('tier_10', 'Десятка', 'Выбить Tier 10', 'fa-hashtag');
@@ -236,7 +259,10 @@ spinBtn.addEventListener('click', () => {
         if (t >= 30) unlockAchievement('tier_30', 'Тридцатка', 'Выбить Tier 30', 'fa-hashtag');
         if (t >= 40) unlockAchievement('tier_40', 'Сороковка', 'Выбить Tier 40', 'fa-hashtag');
         
-        showResult(currentDemon); saveGame(); isSpinning = false; spinBtn.innerHTML = 'Сначала сохрани прогресс!';
+        showResult(currentDemon); 
+        saveGame(); 
+        isSpinning = false; 
+        spinBtn.innerHTML = 'Сначала сохрани прогресс!';
     }, 4200);
 });
 
@@ -250,9 +276,7 @@ saveBtn.addEventListener('click', () => {
     if (val === currentTarget) unlockAchievement('perfect_goal', 'Идеально', 'Пройти ровно по цели', 'fa-bullseye');
     if (val >= currentTarget + 10) unlockAchievement('overkill', 'Оверкилл', 'Пройти на 10% больше', 'fa-explosion');
 
-    if ((selectedCategory === 'extreme' || selectedCategory === 'hardextreme') && currentTarget >= 50) {
-        unlockAchievement('hardcore_50', 'Хардкорщик', 'Цель 50% на Extreme', 'fa-skull');
-    }
+    if ((selectedCategory === 'extreme' || selectedCategory === 'hardextreme') && currentTarget >= 50) unlockAchievement('hardcore_50', 'Хардкорщик', 'Цель 50% на Extreme', 'fa-skull');
 
     let saveCount = parseInt(localStorage.getItem('saveCount')) || 0; saveCount++; localStorage.setItem('saveCount', saveCount);
     unlockAchievement('first_save', 'Сохранил!', 'Сохранить прогресс', 'fa-floppy-disk');
@@ -279,20 +303,11 @@ saveBtn.addEventListener('click', () => {
     if (currentTarget >= 90) unlockAchievement('goal_90', 'Почти у цели', 'Достичь цели 90%', 'fa-flag');
     if (currentTarget >= 100) unlockAchievement('goal_100', 'Финальный рывок', 'Достичь цели 100%', 'fa-medal');
 
-    updateUI(); 
-    historyVal = val; 
-    historyName.textContent = currentDemon.Name; 
-    historyProgress.textContent = val + '%'; 
-    historyBlock.style.display = 'block';
-    
-    resultBlock.classList.remove('show'); drawWheel([]); 
-    wheel.style.transition = 'none'; currentRotation = 0; wheel.style.transform = 'rotate(0deg)';
+    updateUI(); historyVal = val; historyName.textContent = currentDemon.Name; historyProgress.textContent = val + '%'; historyBlock.style.display = 'block';
+    resultBlock.classList.remove('show'); drawWheel([]); wheel.style.transition = 'none'; currentRotation = 0; wheel.style.transform = 'rotate(0deg)';
 
     if (val >= 100) {
-        soundWin.currentTime = 0; 
-        soundWin.volume = 0.6; 
-        soundWin.play().catch(e => {}); 
-
+        soundWin.currentTime = 0; soundWin.volume = 0.6; soundWin.play().catch(e => {}); 
         unlockAchievement('win_100', 'Победитель', 'Пройти на 100%', 'fa-trophy');
         if (selectedCategory === 'easy') unlockAchievement('win_easy', 'Легкая победа', 'Пройти 100% на Easy', 'fa-check');
         if (selectedCategory === 'medium') unlockAchievement('win_medium', 'Средняя победа', 'Пройти 100% на Medium', 'fa-shield');
@@ -300,11 +315,7 @@ saveBtn.addEventListener('click', () => {
         if (selectedCategory === 'insane') unlockAchievement('win_insane', 'Безумная победа', 'Пройти 100% на Insane', 'fa-trophy');
         if (selectedCategory === 'hardextreme') unlockAchievement('win_hardextreme', 'Убийца Богов', 'Пройти 100% на Сложных', 'fa-crown');
         if (selectedCategory === 'extreme') unlockAchievement('win_extreme', 'Экстрим-победитель', 'Пройти 100% на Extreme', 'fa-crown');
-        
-        if (selectedCategory === 'extreme' || selectedCategory === 'hardextreme') {
-            unlockAchievement('hardcore_100', 'Бессмертный', 'Пройти 100% на Extreme', 'fa-dragon');
-        }
-
+        if (selectedCategory === 'extreme' || selectedCategory === 'hardextreme') unlockAchievement('hardcore_100', 'Бессмертный', 'Пройти 100% на Extreme', 'fa-dragon');
         winModal.classList.add('show'); localStorage.removeItem('abyssSpinSave'); return;
     }
     
