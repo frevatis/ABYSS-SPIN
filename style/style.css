@@ -6,6 +6,51 @@
     padding: 0;
     box-sizing: border-box;
 }
+/* ГЛОБАЛЬНЫЙ ЗАПРЕТ НА ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    /* Убеждаемся, что шапка не шире экрана */
+    .head {
+        width: 100vw !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    /* Убираем отступы у контейнера, чтобы ничего не выталкивало */
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* На странице "Связь" сетка карточек может вылезать */
+    .contact-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .contact-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Фикс самого заголовка "Связь с разработчиком" */
+    .hero-title {
+        font-size: 26px !important; 
+        word-break: break-word !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+}
 
 body {
     font-family: 'Roboto', sans-serif;
