@@ -2142,3 +2142,39 @@ body::before {
     transform-origin: 0 0;
     /* ... остальное ... */
 }
+@media (max-width: 768px) {
+    /* ==========================================
+       1. УБИРАЕМ ДЫРУ ПОД ШАПКОЙ (ГЛАВНОЕ МЕНЮ)
+       ========================================== */
+    .screen {
+        /* Подбираем точный отступ под высоту мобильной шапки */
+        padding-top: 135px !important; 
+    }
+
+    #menuScreen .container {
+        padding-top: 10px !important; /* Прижимаем контент к верху */
+    }
+
+    .pod {
+        margin-top: 0 !important;
+        margin-bottom: 20px !important; /* Уменьшаем отступ под бейджем */
+    }
+
+    /* ==========================================
+       2. УВЕЛИЧИВАЕМ ABYSS SPIN В РУЛЕТКЕ
+       ========================================== */
+    /* На странице выбора сложности заголовок имеет класс .hero-title */
+    .hero-title {
+        font-size: 56px !important; /* Делаем крупным и заметным */
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+        letter-spacing: 1px !important;
+    }
+
+    /* Текст под названием делаем чуть аккуратнее */
+    .hero-subtitle {
+        font-size: 15px !important;
+        margin-bottom: 25px !important;
+        line-height: 1.5 !important;
+    }
+}
