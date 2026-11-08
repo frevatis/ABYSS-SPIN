@@ -74,6 +74,10 @@ function updateUI() {
     if (skipsText) skipsText.textContent = skipsLeft;
     if (bestText) bestText.textContent = personalBest + '%';
     if (targetText) targetText.textContent = currentTarget + '%';
+    
+    // ОБНОВЛЯЕМ СКИПЫ В КАРТОЧКЕ РЕЗУЛЬТАТА
+    const resSkips = document.getElementById('resSkips');
+    if (resSkips) resSkips.textContent = skipsLeft;
 }
 
 function showMessage(title, text, iconClass = 'fa-circle-info', iconColor = '#00d4ff') {
@@ -131,7 +135,6 @@ backToMenuBtn.addEventListener('click', (e) => {
     });
 });
 
-
 function drawWheel(list) {
     if (list.length === 0) { 
         wheel.style.background = 'rgba(17, 22, 44, 0.5)'; 
@@ -150,7 +153,6 @@ function drawWheel(list) {
         const angle = i * sectorAngle + sectorAngle / 2;
         const rad = (angle - 90) * (Math.PI / 180); 
         
-        // Отодвигаем текст от центра
         const radiusPercent = 35; 
         const x = 50 + Math.cos(rad) * radiusPercent;
         const y = 50 + Math.sin(rad) * radiusPercent;
@@ -158,7 +160,6 @@ function drawWheel(list) {
         const el = document.createElement('div');
         el.className = 'wheel-label'; 
         
-        // Обрезаем длинные названия
         let shortName = d.Name;
         const maxLen = isMobile ? 8 : 12;
         if (shortName.length > maxLen) shortName = shortName.substring(0, maxLen - 2) + '...';
@@ -169,17 +170,15 @@ function drawWheel(list) {
         el.style.left = `${x}%`;
         el.style.top = `${y}%`;
         
-        // ЖЕСТКО ЗАДАЕМ СТИЛИ, ЧТОБЫ ТЕКСТ НЕ ВЫЛЕЗАЛ
         el.style.position = 'absolute';
-        el.style.transform = `translate(-50%, -50%)`; // Ровно по центру точки
+        el.style.transform = `translate(-50%, -50%)`; 
         el.style.color = '#fff';
         el.style.fontWeight = 'bold';
         el.style.textShadow = '0 2px 4px rgba(0,0,0,1)';
         el.style.textAlign = 'center';
         
-        // Ограничиваем ширину, чтобы текст физически не мог вылезти на соседний сектор
         el.style.maxWidth = isMobile ? '40px' : '60px'; 
-        el.style.whiteSpace = 'normal'; // Разрешаем перенос на новую строку, если не влезает
+        el.style.whiteSpace = 'normal'; 
         el.style.wordBreak = 'break-word';
         el.style.lineHeight = '1.1';
         
@@ -196,12 +195,28 @@ function showResult(demon) {
     resultBlock.classList.add('show');
 }
 
+// ==========================================
+// КОПИРОВАНИЕ ID (ДОБАВЛЕНО СЮДА)
+// ==========================================
+const copyIdBtn = document.getElementById('copyIdBtn');
+if (copyIdBtn && resId) {
+    copyIdBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(resId.textContent).then(() => {
+            copyIdBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+            copyIdBtn.classList.add('copied');
+            setTimeout(() => {
+                copyIdBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+                copyIdBtn.classList.remove('copied');
+            }, 2000);
+        }).catch(err => console.error('Ошибка копирования: ', err));
+    });
+}
+
 spinBtn.addEventListener('click', () => {
     if (currentDemon) return showMessage('Стоп!', 'Сохрани результат прошлого демона!', 'fa-hand', '#ff6b6b');
     if (isSpinning || demons.length === 0) return;
     isSpinning = true; spinBtn.disabled = true; resultBlock.classList.remove('show'); 
 
-    // Счетчики
     let totalSpins = parseInt(localStorage.getItem('totalSpins')) || 0; totalSpins++; localStorage.setItem('totalSpins', totalSpins);
     if (totalSpins >= 1) unlockAchievement('total_spins_1', 'Первый спин', 'Крутить колесо', 'fa-dice');
     updateAchProgress('spin_10', totalSpins, 10, 'Азартный', 'Крутить 10 раз', 'fa-dice-d20');
@@ -212,45 +227,33 @@ spinBtn.addEventListener('click', () => {
     const pool = filterDemons(selectedCategory);
     if (pool.length < 8) { isSpinning = false; spinBtn.disabled = false; return showMessage('Ошибка', 'Мало демонов!', 'fa-triangle-exclamation', '#ff6b6b'); }
     
+    // ТВОЙ НОВЫЙ СПОСОБ ВЫБОРА
     const picked = [...pool].sort(() => Math.random() - 0.5).slice(0, 8);
     const randomIndex = Math.floor(Math.random() * 8); 
     currentDemon = picked[randomIndex];
 
-    // Рисуем колесо (сбрасываем в 0)
     currentRotation = 0; 
     wheel.style.transition = 'none'; 
     wheel.style.transform = 'rotate(0deg)'; 
     drawWheel(picked);
 
-    // Звук
     soundWheel.currentTime = 0; 
     soundWheel.volume = 0.4;
     soundWheel.play().catch(e => {}); 
 
-    // --- ВОТ ИСПРАВЛЕННАЯ МАТЕМАТИКА ---
     const sectorAngle = 360 / 8;
-    // Центр нужного сектора в системе conic-gradient (0 градусов = справа)
     const sectorCenter = randomIndex * sectorAngle + (sectorAngle / 2);
     
-    // Стрелка у нас на 12 часах (сверху). В системе conic-gradient это 270 градусов.
-    // Нам нужно повернуть колесо так, чтобы центр сектора встал на 270 градусов.
-    // Прибавляем 5 полных оборотов (1800), чтобы было красиво.
-   // Теперь математика идеальная: так как колесо начинается сверху, 
-// нам нужно просто крутить на 360 минус угол сектора.
-let targetDegrees = 1800 + (360 - sectorCenter);
-    
-    // Если вдруг получилось меньше 1800, добавляем 360, чтобы крутить по часовой
+    let targetDegrees = 1800 + (360 - sectorCenter);
     if (targetDegrees < 1800) targetDegrees += 360;
 
     currentRotation = targetDegrees;
 
-    // Запускаем плавную крутку (БЕЗ телепорта в конце!)
     setTimeout(() => {
         wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
         wheel.style.transform = `rotate(${targetDegrees}deg)`;
     }, 50);
 
-    // Показываем карточку (без изменения колеса)
     setTimeout(() => {
         let t = Math.floor(Number(currentDemon.Tier));
         if (t === 7) unlockAchievement('lucky_7', 'Счастливчик', 'Выбить Tier 7', 'fa-clover');
