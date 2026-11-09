@@ -12,35 +12,36 @@ html, body {
     max-width: 100vw !important;
     position: relative;
 }
-@media (max-width: 768px) {
-    /* Выравниваем контент в карточках Топ-демонов по левому краю */
-    .top-item {
-        justify-content: space-between !important; /* Текст слева, тир справа */
-        padding: 15px !important; /* Чуть уменьшаем отступы, чтобы было больше места */
-    }
+/* ============================================================
+   ИСПРАВЛЕНИЕ ВЫРАВНИВАНИЯ В ТОПЕ ДЕМОНОВ (ПК И ТЕЛЕФОН)
+   ============================================================ */
+.top-item {
+    display: flex !important;
+    justify-content: space-between !important; /* Раздвигает текст и тир по краям */
+    align-items: center !important; 
+    padding: 20px 30px !important;
+}
 
-    .top-info {
-        text-align: left !important; /* Жестко прижимаем текст влево */
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* Прижимаем элементы друг под другом влево */
-    }
+.top-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important; /* Прижимает текст влево */
+    text-align: left !important;
+}
 
-    .top-info h3 {
-        text-align: left !important;
-        margin-bottom: 5px !important;
-    }
+.top-info h3 {
+    text-align: left !important;
+    margin: 0 0 5px 0 !important;
+}
 
-    .top-info p {
-        text-align: left !important;
-        font-size: 12px !important; /* На телефоне мелкий шрифт читается лучше */
-    }
+.top-info p {
+    text-align: left !important;
+    margin: 0 !important;
+}
 
-    /* Тир (цифру) оставляем справа */
-    .top-tier {
-        flex-shrink: 0;
-        margin-left: 10px;
-    }
+.top-tier {
+    flex-shrink: 0 !important; /* Запрещает цифре сжиматься */
+    margin-left: 20px !important;
 }
 @media (max-width: 768px) {
     /* Уменьшаем заголовки на страницах Политики и Условий */
