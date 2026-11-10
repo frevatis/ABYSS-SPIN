@@ -47,11 +47,36 @@
             
             <h1 class="hero-title" style="font-size: 60px; margin-bottom: 10px;">ТОП ДЕМОНОВ</h1>
             <p class="hero-subtitle" style="margin-bottom: 30px;">Полный список уровней, отсортированный по сложности (Тирам)</p>
+                    <!-- БЛОК ПОИСКА С ВЫБОРОМ -->
+        <div class="search-wrapper">
+            <div class="search-container">
+                
+                <!-- ВЫПАДАЮЩИЙ СПИСОК -->
+                <select id="searchType">
+                    
+                    <option value="all">Везде</option>
+                    <option value="name">По названию</option>
+                    <option value="creator">По автору</option>
+                    <option value="id">По ID</option>
+                    <option value="tier">По тиру</option>
+                    <option value="top">По месту в топе</option>
+                   
+                </select>
 
+                <div class="search-divider"></div>
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Введите запрос...">
+            </div>
+        </div>
             <!-- Сюда будем вставлять карточки через JS -->
             <div id="topList" class="top-list"></div>
 
         </div>
+            <!-- Кнопка Наверх -->
+    <button id="scrollTopBtn" class="scroll-top-btn" title="Наверх">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
         <footer class="footer">
         <div class="footer-container">
             <div class="footer-grid">

@@ -11,6 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style/style.css">
     <script src="global.js"></script>
+    <script src="script.js"></script>
     <title>ABYSS SPIN</title>
 </head>
 
@@ -61,25 +62,41 @@
                     уровень
                     тебе выпадет.</p>
             </div>
-            <div class="bur">
+                        <div class="bur">
                 <button><a href="roulette.html">Крутить <span class="right"> ➜</span></a></button>
                 <button><a href="top.html">Топ демонов<span class="right1"> ➜</span></a></button>
+               
             </div>
 
         </div>
-        <div class="stats">
+            <div class="stats">
             <div class="stata">
+                <!-- Твои старые карточки (оставь их) -->
                 <div class="bloc1">
                     <span class="num">8500+</span>
                     <p>Демонов</p>
                 </div>
                 <div class="bloc2">
-                    <span class="num">30</span>
+                    <span class="num">39</span>
                     <p>Тиров сложности</p>
                 </div>
                 <div class="bloc3">
                     <span class="num">24/7</span>
                     <p>Крути когда хочешь</p>
+                </div>
+                
+                <!-- НОВЫЕ КАРТОЧКИ СТАТИСТИКИ -->
+                <div class="bloc1">
+                    <span class="num" id="statSpins">0</span>
+                    <p>Твоих спинов</p>
+                </div>
+                <div class="bloc2">
+                    <span class="num" id="statWins" style="color: #ffd700;">0</span>
+                    <p>Побед (100%)</p>
+                </div>
+                <div class="bloc3">
+                    <span class="num" id="statSkips" style="color: #ff6b6b;">0</span>
+                    <p>Потрачено скипов</p>
                 </div>
             </div>
         </div>
@@ -152,7 +169,7 @@
                 <span>Что такое Tier?</span>
             </div>
             <div class="faq-answer">
-                <p>Это уровень сложности по системе GDDL: от 1 (лёгкие) до 30 (самые хардкорные). Чем выше Tier — тем сложнее демон.</p>
+                <p>Это уровень сложности по системе GDDL: от 1 (лёгкие) до 50 (самые хардкорные). Чем выше Tier — тем сложнее демон.</p>
             </div>
         </div>
 

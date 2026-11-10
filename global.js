@@ -272,3 +272,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+// СТАТИСТИКА НА ГЛАВНОЙ
+function updateHomeStats() {
+    const sSpins = document.getElementById('statSpins');
+    const sWins = document.getElementById('statWins');
+    const sSkips = document.getElementById('statSkips');
+    
+    if (sSpins) sSpins.textContent = parseInt(localStorage.getItem('totalSpins')) || 0;
+    if (sWins) sWins.textContent = parseInt(localStorage.getItem('totalWins')) || 0;
+    if (sSkips) sSkips.textContent = parseInt(localStorage.getItem('totalSkips')) || 0;
+}
+
+// Вызываем при загрузке страницы
+document.addEventListener('DOMContentLoaded', updateHomeStats);

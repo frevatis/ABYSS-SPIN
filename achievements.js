@@ -259,3 +259,189 @@ if (openResetBtn && resetConfirmModal) {
         location.reload(); // Перезагружаем страницу
     });
 }
+// ==========================================
+// ЛОГИКА СОРТИРОВКИ И ФИЛЬТРАЦИИ
+// ==========================================
+
+let currentSort = 'default';
+let difficultyAsc = false;
+let currentType = 'all'; // Выбранный тип ачивок
+
+// Обработка кнопок сортировки
+document.querySelectorAll('.sort-btn[data-sort]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const clickedSort = e.target.dataset.sort;
+        
+        if (clickedSort === 'difficulty' && currentSort === 'difficulty') {
+            difficultyAsc = !difficultyAsc;
+        } else if (clickedSort === 'difficulty') {
+            difficultyAsc = false;
+        }
+
+        document.querySelectorAll('.sort-btn[data-sort]').forEach(b => {
+            b.classList.remove('active');
+            b.innerHTML = b.innerHTML.replace(/ ↓| ↑/g, '');
+        });
+        e.target.classList.add('active');
+        currentSort = clickedSort;
+
+        if (currentSort === 'difficulty') {
+            e.target.innerHTML = `По сложности ${difficultyAsc ? '↑' : '↓'}`;
+        }
+
+        redraw();
+    });
+});
+
+// Открытие/закрытие выпадающего списка "По типу"
+const typeFilterBtn = document.getElementById('typeFilterBtn');
+const typeDropdown = document.getElementById('typeDropdown');
+
+typeFilterBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    typeDropdown.classList.toggle('show');
+    document.querySelectorAll('.sort-btn[data-sort]').forEach(b => b.classList.remove('active'));
+    typeFilterBtn.classList.add('active');
+});
+
+// Выбор типа в выпадающем списке
+document.querySelectorAll('.type-option').forEach(opt => {
+    opt.addEventListener('click', (e) => {
+        document.querySelectorAll('.type-option').forEach(o => o.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        currentType = e.target.dataset.type;
+        currentSort = 'type'; // Переключаем режим на "по типу"
+        
+        typeDropdown.classList.remove('show');
+        typeFilterBtn.innerHTML = `${e.target.textContent} <i class="fa-solid fa-chevron-down"></i>`;
+        
+        redraw();
+    });
+});
+
+// Закрываем список при клике мимо
+document.addEventListener('click', () => {
+    typeDropdown.classList.remove('show');
+});
+
+// ФУНКЦИЯ ПРОВЕРКИ ТИПА АЧИВКИ
+function getAchievementType(ach) {
+    if (ach.isSecret || ach.id.includes('sec_') || ach.id.includes('easter')) return 'secret';
+    if (ach.id.includes('easy_start') || ach.id.includes('med_start') || ach.id.includes('hard_start') || ach.id.includes('insane_start') || ach.id.includes('extreme_start')) return 'category';
+    
+    if (ach.desc.includes('Крутить')) return 'spin';
+    if (ach.desc.includes('Сохранить')) return 'save';
+    if (ach.desc.includes('Скип') || ach.desc.includes('пропуск')) return 'skip';
+    
+    if (ach.desc.includes('Пройти') || ach.desc.includes('%')) return 'percent';
+    
+    return 'site';
+}
+
+function redraw() {
+    document.getElementById('achievementsList').innerHTML = '';
+    drawAchievements();
+}
+
+function drawAchievements() {
+    const listContainer = document.getElementById('achievementsList');
+    let displayData = [...achievementsData]; 
+
+    // 1. ФИЛЬТРАЦИЯ ПО ТИПУ
+    if (currentType !== 'all') {
+        displayData = displayData.filter(ach => getAchievementType(ach) === currentType);
+    }
+
+    // 2. СОРТИРОВКА
+    if (currentSort === 'difficulty') {
+        const diffs = ["Легкие", "Средние", "Тяжелые", "Очень сложные", "Impossible", "Секреты", "gold"];
+        displayData.sort((a, b) => {
+            const indexA = diffs.indexOf(a.cat);
+            const indexB = diffs.indexOf(b.cat);
+            if (difficultyAsc) return indexA - indexB;
+            else return indexB - indexA;
+        });
+    } 
+    else if (currentSort === 'status') {
+        displayData.sort((a, b) => {
+            const aOpen = unlocked.includes(a.id) ? 0 : 1;
+            const bOpen = unlocked.includes(b.id) ? 0 : 1;
+            return aOpen - bOpen;
+        });
+    }
+
+    // Если ничего не найдено после фильтра
+    if (displayData.length === 0) {
+        listContainer.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 30px;">Нет ачивок такого типа :(</p>';
+        return;
+    }
+
+    // РИСУЕМ
+    const categories = [...new Set(displayData.map(a => a.cat))]; 
+
+    categories.forEach(catName => {
+        const catAchs = displayData.filter(a => a.cat === catName);
+        const catClass = catAchs[0].class;
+        
+        const title = document.createElement('h2');
+        title.className = `ach-category-title ${catClass}`;
+        title.textContent = catName === "gold" ? "Особое достижение" : catName;
+        listContainer.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'ach-category-grid';
+
+        catAchs.forEach(ach => {
+            // ... (твой код отрисовки карточки из прошлого сообщения, он не меняется)
+            let isAchUnlocked = unlocked.includes(ach.id);
+            let currentProgress = progressData[ach.id] || 0;
+            let maxProgress = 0;
+            
+            const numberMatch = ach.desc.match(/\d+/);
+            const isWinAch = ach.desc.includes("100% на") || ach.id.includes('win_') || ach.id.includes('hardcore_100');
+
+            if (numberMatch && !isWinAch) {
+                if (ach.desc.includes("Крутить") || ach.desc.includes("Сохранить") || ach.desc.includes("Пройти") || ach.desc.includes("Достичь цели") || ach.desc.includes("Использовать") || ach.desc.includes("Отменить")) {
+                    maxProgress = parseInt(numberMatch[0]);
+                }
+            }
+
+            if (!isAchUnlocked && maxProgress > 0 && currentProgress >= maxProgress) {
+                isAchUnlocked = true;
+            }
+
+            let progressBar = '';
+            if (!isAchUnlocked && maxProgress > 0) {
+                let percent = Math.min((currentProgress / maxProgress) * 100, 100);
+                progressBar = `
+                    <div class="ach-progress-bar">
+                        <div class="ach-progress-fill" style="width: ${percent}%;"></div>
+                    </div>
+                    <small style="color: rgba(255,255,255,0.4); font-size: 11px; margin-top: 4px; display: block;">${currentProgress} / ${maxProgress}</small>
+                `;
+            }
+
+            const card = document.createElement('div');
+            card.className = `ach-card ${isAchUnlocked ? 'unlocked' : 'locked'} ${catClass}`;
+            
+            const displayTitle = ach.isSecret && !isAchUnlocked ? "??? (Секрет)" : ach.title;
+            const displayDesc = ach.isSecret && !isAchUnlocked ? "Подсказка: " + ach.desc : ach.desc;
+            const displayIcon = ach.isSecret && !isAchUnlocked ? "fa-question" : ach.icon;
+
+            card.innerHTML = `
+                <div class="ach-icon">
+                    <i class="fa-solid ${displayIcon}"></i>
+                </div>
+                <div class="ach-info" style="width: 100%;">
+                    <h3>${displayTitle}</h3>
+                    <p>${displayDesc}</p>
+                    ${progressBar}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        listContainer.appendChild(grid);
+    });
+}

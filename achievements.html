@@ -48,34 +48,70 @@
         <h1 class="hero-title" style="font-size: 60px; margin-bottom: 10px;">ДОСТИЖЕНИЯ</h1>
         <p class="hero-subtitle" style="margin-bottom: 30px;">Твои награды за страдания в рулетке</p>
 
-        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+              <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
         <div class="ach-controls">
             <div class="ach-progress-text">
-                Открыто: <span id="achCount">0</span> из 78
+                Открыто: <span id="achCount">0</span> из 50
             </div>
-         <button id="resetAchievements" class="btn-reset" onclick="document.getElementById('resetConfirmModal').classList.add('show')">
-    <i class="fa-solid fa-rotate-left"></i> Сбросить весь прогресс
-</button>
-
+            <button id="resetAchievements" class="btn-reset" onclick="document.getElementById('resetConfirmModal').classList.add('show')">
+                <i class="fa-solid fa-rotate-left"></i> Сбросить весь прогресс
+            </button>
         </div>
+
+        <!-- НОВАЯ ПАНЕЛЬ ФИЛЬТРОВ -->
+        <div class="sort-panel">
+            <span class="sort-label">Сортировка:</span>
+            <button class="sort-btn active" data-sort="default">По умолчанию</button>
+            <button class="sort-btn" data-sort="difficulty" id="sortDiffBtn">По сложности</button>
+            <button class="sort-btn" data-sort="status">По статусу</button>
+            
+            <!-- ВЫПАДАЮЩИЙ СПИСОК ТИПОВ -->
+            <div class="type-filter-wrapper">
+                <button class="sort-btn" id="typeFilterBtn">По типу <i class="fa-solid fa-chevron-down"></i></button>
+                <div class="type-dropdown" id="typeDropdown">
+                    <div class="type-option active" data-type="all">Все типы</div>
+                    <div class="type-option" data-type="percent">На проценты (%)</div>
+                    <div class="type-option" data-type="spin">На кручение колеса</div>
+                    <div class="type-option" data-type="save">На сохранения</div>
+                    <div class="type-option" data-type="skip">На скипы</div>
+                    <div class="type-option" data-type="secret">Секретные пасхалки</div>
+                    <div class="type-option" data-type="site">Действия на сайте</div>
+                    <div class="type-option" data-type="category">Выбор сложности</div>
+                </div>
+            </div>
+        </div>
+
         <div id="achievementsList" style="width: 100%; display: flex; flex-direction: column;"></div>
+
+        <!-- Сюда JS вставляет карточки -->
+        <div id="achievementsList" style="width: 100%; display: flex; flex-direction: column;"></div>
+
     </div>
-           <!-- ОКНО ПОБЕДЫ (ВСЕ АЧИВКИ) -->
+    <div id="achievementsList" style="width: 100%; display: flex; flex-direction: column;"></div>
+    </div>
+    <!-- ОКНО ПОБЕДЫ (ВСЕ АЧИВКИ) -->
     <div id="finalWinModal" class="modal-overlay">
-        <div class="modal-box" style="border-color: #ffd700; box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); text-align: center;">
-            <div class="modal-icon" style="color: #ffd700; font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 20px #ffd700);">
+        <div class="modal-box"
+            style="border-color: #ffd700; box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); text-align: center;">
+            <div class="modal-icon"
+                style="color: #ffd700; font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 20px #ffd700);">
                 <i class="fa-solid fa-trophy"></i>
             </div>
-            <h3 style="font-size: 32px; color: #ffd700; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">АБСОЛЮТНЫЙ ПОБЕДИТЕЛЬ!</h3>
-            <p style="font-size: 16px; color: #fff; margin-bottom: 10px;">Ты выполнил <b>ВСЕ</b> задания в ABYSS SPIN!</p>
-            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5); margin-bottom: 30px;">Даже РобТоп аплодирует тебе стоя.</p>
-            
-            <button onclick="document.getElementById('finalWinModal').classList.remove('show')" class="btn-save" style="width: 100%; padding: 15px; font-size: 18px; background: linear-gradient(90deg, #ffd700, #ff8c00); color: #11162c; font-weight: 900;">
+            <h3
+                style="font-size: 32px; color: #ffd700; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">
+                АБСОЛЮТНЫЙ ПОБЕДИТЕЛЬ!</h3>
+            <p style="font-size: 16px; color: #fff; margin-bottom: 10px;">Ты выполнил <b>ВСЕ</b> задания в ABYSS SPIN!
+            </p>
+            <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5); margin-bottom: 30px;">Даже РобТоп аплодирует
+                тебе стоя.</p>
+
+            <button onclick="document.getElementById('finalWinModal').classList.remove('show')" class="btn-save"
+                style="width: 100%; padding: 15px; font-size: 18px; background: linear-gradient(90deg, #ffd700, #ff8c00); color: #11162c; font-weight: 900;">
                 Забрать славу
             </button>
         </div>
     </div>
-          <!-- ОКНО ПОДТВЕРЖДЕНИЯ СБРОСА -->
+    <!-- ОКНО ПОДТВЕРЖДЕНИЯ СБРОСА -->
     <div id="resetConfirmModal" class="modal-overlay">
         <div class="modal-box" style="border-color: #ff6b6b;">
             <div class="modal-icon" style="color: #ff6b6b;">
@@ -85,10 +121,11 @@
             <p>Ты уверен? Весь твой прогресс, открытые ачивки и пройденные челленджи будут <b>удалены</b>.</p>
             <div class="modal-actions">
                 <!-- Кнопка Отмены закрывает окно -->
-                <button id="cancelResetBtn" class="btn-cancel" onclick="document.getElementById('resetConfirmModal').classList.remove('show')">
+                <button id="cancelResetBtn" class="btn-cancel"
+                    onclick="document.getElementById('resetConfirmModal').classList.remove('show')">
                     Отмена
                 </button>
-                
+
                 <!-- Кнопка Сброса очищает всю память и перезагружает страницу -->
                 <button id="confirmResetBtn" class="btn-confirm" onclick="
                     localStorage.removeItem('unlockedAchievements');
@@ -170,7 +207,7 @@
         </div>
         <script src="achievements.js"></script>
         <script src="global.js"></script>
-        
+
 </body>
 
 </html>

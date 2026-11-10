@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Sansation:wght@700&display=swap" rel="stylesheet">
-    <!-- Ссылка на твой основной CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Sansation:wght@700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style/style.css">
     <title>ABYSS SPIN</title>
 </head>
+
 <body>
 
     <!-- ФОНОВЫЕ ИКОНКИ -->
@@ -29,11 +31,10 @@
     <header class="head">
         <div class="head_p">
             <div class="head_text">
-                <!-- Кнопка возврата в меню (появится на экране рулетки) -->
-                <a href="#" id="backToMenu" style="display: none; color: #00d4ff;"><i class="fa-solid fa-arrow-left"></i> В меню</a>
-                
+                <a href="#" id="backToMenu" style="display: none; color: #00d4ff;"><i
+                        class="fa-solid fa-arrow-left"></i> В меню</a>
                 <a href="index.html">Главная</a>
-                <a href="roulette.html"  style="color: #fff;">Рулетка</a>
+                <a href="roulette.html" style="color: #fff;">Рулетка</a>
                 <a href="how.html">Как работает?</a>
                 <div class="img">
                     <img src="img/Gemini_Generated_Image_upjgmjupjgmjupjg.jpg" alt="logo">
@@ -49,29 +50,35 @@
     <div id="menuScreen" class="screen active">
         <div class="container">
             <div class="pod">
-                  <div class="p">
+                <div class="p">
                     <i class="fa-solid fa-circle-check"></i>
                     <p>База 8 500+ демонов</p>
                 </div>
             </div>
-            
+
             <h1 class="hero-title">ABYSS SPIN</h1>
-            
+
             <p class="hero-subtitle">
                 Выбери сложность, чтобы начать рулетку.<br>
                 <span class="highlight">Каждый раз нужно проходить на 1% больше!</span>
             </p>
-            
+
             <div class="category-grid">
                 <button class="cat-btn" data-cat="easy">Easy Demon</button>
                 <button class="cat-btn" data-cat="medium">Medium Demon</button>
                 <button class="cat-btn" data-cat="hard">Hard Demon</button>
                 <button class="cat-btn" data-cat="insane">Insane Demon</button>
                 <button class="cat-btn" data-cat="extreme">Extreme Demon</button>
-                  <button class="cat-btn" data-cat="hardextreme" style="border-color: #ff6b6b; color: #ff6b6b;">Hard Extreme Demon</button>
-                <button class="cat-btn" data-cat="all">Все демоны</button>
-                <!-- СЕКРЕТНАЯ КНОПКА -->
+                <button class="cat-btn" data-cat="hardextreme" style="border-color: #ff6b6b; color: #ff6b6b;">Hard
+                    Extreme Demon</button>
+                <!-- НОВАЯ КАТЕГОРИЯ ТОП-100 -->
+                <button class="cat-btn" data-cat="top100"
+                    style="border-color: #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+                    <i class="fa-solid fa-crown"></i> Top 100 demons
+                </button>
+                <button class="cat-btn" data-cat="all">All demons</button>
                 <button class="cat-btn secret-ninja-btn" id="ninjaBtn">Секрет?</button>
+
             </div>
         </div>
     </div>
@@ -79,7 +86,6 @@
     <!-- ЭКРАН 2: РУЛЕТКА -->
     <div id="gameScreen" class="screen">
         <div class="container">
-            
             <!-- ПАНЕЛЬ СТАТИСТИКИ -->
             <div class="game-stats">
                 <div class="stat-item">
@@ -97,14 +103,21 @@
             </div>
 
             <h2 class="h2" id="currentCategoryTitle">Категория: Все</h2>
-            
+
             <div class="wheel-container">
                 <div class="pointer"></div>
                 <div class="wheel" id="wheel"></div>
+                <!-- БЛОК РУЛЕТКИ (МЕЛЬКАЕТ НАЗВАНИЯМИ) -->
+                <div id="wheelResultBlock" class="wheel-result-block" style="display: none;">
+                    <div class="casino-slot">
+                        <h3 id="wheelTempName">Название...</h3>
+                    </div>
+                </div>
             </div>
-            
+
+            <!-- КНОПКА КРУТИТЬ -->
             <button id="spinBtn" class="main-spin-btn">Крутить <i class="fa-solid fa-arrow-right"></i></button>
-            
+
             <!-- БЛОК РЕЗУЛЬТАТА -->
             <div id="resultBlock" class="result-card">
                 <div class="res-header">
@@ -119,17 +132,36 @@
                             <i class="fa-regular fa-copy"></i>
                         </button>
                     </div>
+                    <!-- БЛОК ТОПА -->
+                    <span id="resTop" class="res-top" style="display: none;">Топ #1</span>
                 </div>
+                <!-- КНОПКА ПОДЕЛИТЬСЯ -->
+                <button id="shareBtn" class="btn-share">
+                    <i class="fa-solid fa-share-nodes"></i> Поделиться результатом
+                </button>
+
                 <div class="res-actions">
                     <div class="progress-input">
                         <label id="goalLabel">Пройти минимум: 1%</label>
                         <input type="text" id="progressInput" placeholder="Например: 4">
                     </div>
-                    <!-- ВОТ ТУТ ДОБАВЛЕН БЛОК СКИПОВ -->
+
+                    <!-- СКИПЫ -->
                     <div class="res-skips-info" style="display: flex; align-items: center; gap: 5px; margin: 0 10px;">
                         <span style="font-size: 14px; color: rgba(255,255,255,0.5);">Скипов:</span>
                         <span id="resSkips" style="font-weight: 700; color: #ff6b6b;">5</span>
                     </div>
+
+                    <!-- ОТМЕНЫ -->
+                    <div class="res-skips-info"
+                        style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
+                        <span style="font-size: 14px; color: rgba(255,255,255,0.5);">Отмен:</span>
+                        <span id="resUndos" style="font-weight: 700; color: #ffa500;">2</span>
+                    </div>
+
+                    <!-- КНОПКА ОТМЕНЫ -->
+                    <button id="undoBtn" class="btn-undo" style="display: none;">Отмена</button>
+
                     <button id="skipBtn" class="btn-skip">Скип</button>
                     <button id="saveBtn" class="btn-save">Сохранить</button>
                 </div>
@@ -141,28 +173,25 @@
                 <h4 id="historyName">Название</h4>
                 <span id="historyProgress">0%</span>
             </div>
-
         </div>
     </div>
-    
+
     <!-- УНИВЕРСАЛЬНОЕ МОДАЛЬНОЕ ОКНО -->
     <div id="customModal" class="modal-overlay">
         <div class="modal-box" id="modalBox">
             <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <h3 id="modalTitle">Заголовок</h3>
             <p id="modalText">Текст сообщения</p>
-            
             <div class="modal-actions" id="modalActions" style="display: none;">
                 <button id="modalCancelBtn" class="btn-cancel">Остаться</button>
                 <button id="modalConfirmBtn" class="btn-confirm">Выйти</button>
             </div>
-
             <div class="modal-actions" id="modalOkAction" style="display: none;">
                 <button id="modalOkBtn" class="btn-save" style="padding: 12px 40px; width: 100%;">Понятно</button>
             </div>
         </div>
     </div>
-    
+
     <!-- ОКНО ПОБЕДЫ -->
     <div id="winModal" class="modal-overlay">
         <div class="modal-box" style="border-color: #ffd700; box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);">
@@ -172,17 +201,19 @@
             <h3>Поздравляем!</h3>
             <p>Ты прошел рулетку до конца и достиг <b>100%</b>!<br>Ты настоящий мастер Geometry Dash.</p>
             <div class="modal-actions" style="justify-content: center;">
-                <button id="winOkBtn" class="btn-save" style="width: 100%; padding: 14px; font-size: 16px;">Начать заново</button>
+                <button id="winOkBtn" class="btn-save" style="width: 100%; padding: 14px; font-size: 16px;">Начать
+                    заново</button>
             </div>
         </div>
     </div>
 
+    <!-- ПОДВАЛ -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-col">
                     <a href="index.html" class="footer-logo">
-                         <img src="img/Gemini_Generated_Image_upjgmjupjgmjupjg.jpg" alt="logo">
+                        <img src="img/Gemini_Generated_Image_upjgmjupjgmjupjg.jpg" alt="logo">
                         <span>ABYSS SPIN</span>
                     </a>
                     <p class="footer-desc">
@@ -208,9 +239,12 @@
                 <div class="footer-col">
                     <h4>Ресурсы</h4>
                     <ul class="footer-links">
-                        <li><a href="https://demonlist.org/classic" target="_blank"><i class="fa-solid fa-chevron-right"></i> Demonlist</a></li>
-                        <li><a href="https://gdladder.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDDL</a></li>
-                        <li><a href="https://gdbrowser.com" target="_blank"><i class="fa-solid fa-chevron-right"></i> GDBrowser</a></li>
+                        <li><a href="https://demonlist.org/classic" target="_blank"><i
+                                    class="fa-solid fa-chevron-right"></i> Demonlist</a></li>
+                        <li><a href="https://gdladder.com" target="_blank"><i class="fa-solid fa-chevron-right"></i>
+                                GDDL</a></li>
+                        <li><a href="https://gdbrowser.com" target="_blank"><i class="fa-solid fa-chevron-right"></i>
+                                GDBrowser</a></li>
                     </ul>
                 </div>
 
@@ -234,8 +268,9 @@
         </div>
     </footer>
 
-    <!-- Подключаем JS файлы (ТОЛЬКО ОДИН РАЗ) -->
+    <!-- СКРИПТЫ -->
     <script src="global.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
