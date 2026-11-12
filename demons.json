@@ -50362,8 +50362,9 @@
   {"name":"encroaching dark","creator":"e3ea","id":100041767,"tier":20.0,"top":1155},
   {"name":"Supernova","creator":"royen","id":104895221,"tier":20.0,"top":1156},
   {"name":"ReVolution Unleashed","creator":"WayAway04","id":109540067,"tier":20.0,"top":1157},
-  {"name":"cja","creator":"DWGro","id":112209834,"tier":20.0,"top":1158}
-  [
+  {"name":"cja","creator":"DWGro","id":112209834,"tier":20.0,"top":1158},
+  
+  
   {"name":"Wind Storm","top":1162},
   {"name":"Pumped Up Kicks","top":1164},
   {"name":"FUTURE DEMON MACHINE","top":1167},
@@ -50425,7 +50426,7 @@
   {"name":"In Circles","top":1240},
   {"name":"squelch","top":1244},
   {"name":"EXTREME MEMORY MIX","top":1245}
-  ]
+  
 
 
 ]
