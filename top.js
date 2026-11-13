@@ -2,7 +2,7 @@ let allDemons = [];
 let currentCategory = 'extreme'; // По умолчанию Экстримы
 
 // Загрузка
-fetch('/demons.json')
+fetch('demons.json')
     .then(res => res.json())
     .then(data => {
         allDemons = data.map(d => {
