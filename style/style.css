@@ -1109,7 +1109,7 @@ body::before {
     margin: 20px 0;
     letter-spacing: -3px;
     background: linear-gradient(135deg, #6c63ff, #00d4ff);
-  
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: pulse 3s ease-in-out infinite;
 }
@@ -1739,7 +1739,7 @@ body::before {
     font-size: 48px;
     margin-bottom: 10px;
     background: linear-gradient(135deg, #6c63ff, #00d4ff);
-  
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: center;
 }
