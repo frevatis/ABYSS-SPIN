@@ -2,7 +2,7 @@ let allDemons = [];
 let currentCategory = 'extreme'; // По умолчанию Все Экстримы
 
 // Загрузка
-fetch('/demons.json')
+fetch('demons.json')
     .then(res => res.json())
     .then(data => {
         // Убираем дубликаты
