@@ -1,25 +1,36 @@
 let allDemons = [];
-let currentCategory = 'extreme'; // По умолчанию Экстримы
+let currentCategory = 'extreme'; // По умолчанию Все Экстримы
 
 // Загрузка
-fetch('demons.json')
+fetch('/demons.json')
     .then(res => res.json())
     .then(data => {
-        allDemons = data.map(d => {
+        // Убираем дубликаты
+        const uniqueData = [];
+        const seenIds = new Set();
+        data.forEach(d => {
+            const levelId = String(d.id || d.ID || 0);
+            if (!seenIds.has(levelId)) {
+                seenIds.add(levelId);
+                uniqueData.push(d);
+            }
+        });
+
+        allDemons = uniqueData.map(d => {
             let rawTier = d.tier || d.Tier;
-            let finalTier = (rawTier === 'imposible' || rawTier === 'impossible') ? 99 : Number(rawTier);
+            let isImp = (rawTier === 'imposible' || rawTier === 'impossible' || Number(rawTier) === 99);
+            let finalTier = isImp ? 99 : Number(rawTier);
             let finalTop = d.top || d.Top || d.Impossible_Top || null;
 
             return {
-                Name: d.name || d.Name,
-                Creator: d.creator || d.Creator,
-                ID: d.id || d.ID,
+                Name: String(d.name || d.Name || "Unknown"),
+                Creator: String(d.creator || d.Creator || "Unknown"),
+                ID: String(d.id || d.ID || 0),
                 Tier: finalTier,
                 Top: finalTop
             };
         });
         
-        // ВОТ ТУТ ДЕЛАЕМ КНОПКУ АКТИВНОЙ ПРИ ЗАГРУЗКЕ
         document.querySelectorAll('.filter-cat-btn').forEach(b => b.classList.remove('active'));
         const defaultBtn = document.querySelector(`.filter-cat-btn[data-filter="extreme"]`);
         if (defaultBtn) defaultBtn.classList.add('active');
@@ -38,15 +49,19 @@ document.querySelectorAll('.filter-cat-btn').forEach(btn => {
 });
 
 function renderList() {
-    const query = document.getElementById('searchInput').value.toLowerCase().trim();
-    const searchType = document.getElementById('searchType').value;
+    const input = document.getElementById('searchInput');
+    const typeInput = document.getElementById('searchType');
     
-    // 1. Фильтр по категории
+    const query = input ? input.value.toLowerCase().trim() : '';
+    const searchType = typeInput ? typeInput.value : 'all';
+    
+    // 1. Фильтр
     let filtered = [];
-    if (currentCategory === 'top') {
-        filtered = allDemons.filter(d => d.Top !== null && d.Top <= 100).sort((a,b) => a.Top - b.Top);
-    } else if (currentCategory === 'extreme') {
-        filtered = allDemons.filter(d => d.Tier > 20 && d.Tier < 99).sort((a,b) => b.Tier - a.Tier);
+    if (currentCategory === 'extreme') {
+        filtered = allDemons.filter(d => {
+            const t = Number(d.Tier);
+            return t > 20 && t < 99; // Все экстримы
+        }).sort((a,b) => b.Tier - a.Tier); // Сортируем по тиру (сложности)
     } else if (currentCategory === 'impossible') {
         filtered = allDemons.filter(d => d.Tier === 99);
     }
@@ -54,13 +69,16 @@ function renderList() {
     // 2. Поиск
     if (query !== '') {
         filtered = filtered.filter(d => {
-            if (searchType === 'name') return d.Name.toLowerCase().includes(query);
-            if (searchType === 'creator') return d.Creator.toLowerCase().includes(query);
-            if (searchType === 'id') return String(d.ID).includes(query);
-            if (searchType === 'tier') return String(d.Tier).includes(query);
-            if (searchType === 'top') return String(d.Top).includes(query);
-            // all
-            return d.Name.toLowerCase().includes(query) || d.Creator.toLowerCase().includes(query) || String(d.ID).includes(query);
+            const name = d.Name.toLowerCase();
+            const creator = d.Creator.toLowerCase();
+            const id = d.ID.toLowerCase();
+            const tier = String(d.Tier).toLowerCase();
+
+            if (searchType === 'name') return name.includes(query);
+            if (searchType === 'creator') return creator.includes(query);
+            if (searchType === 'id') return id.includes(query);
+            if (searchType === 'tier') return tier.includes(query);
+            return name.includes(query) || creator.includes(query) || id.includes(query);
         });
     }
 
@@ -73,18 +91,19 @@ function renderList() {
         return;
     }
 
-    filtered.forEach((demon) => {
+    filtered.forEach((demon, index) => {
         const item = document.createElement('div');
         item.className = 'top-item';
         
         const isImp = demon.Tier === 99;
-        const tierText = isImp ? 'IMPOSSIBLE' : demon.Tier.toFixed(1);
+        
+        // Тир
+        let tierText = isImp ? 'IMPOSSIBLE' : Number(demon.Tier).toFixed(1);
         const tierColor = isImp ? '#ff0000' : '#00d4ff';
         
-        // Если топа нет, ставим прочерк, иначе #номер
-        const place = demon.Top ? `#${demon.Top}` : '-';
+        // НОМЕР ТОПА: Берем из JSON, а если его нет — ставим индекс в списке
+        const place = demon.Top ? `#${demon.Top}` : `#${index + 1}`;
 
-        // ВОТ ТУТ МАГИЯ: Топ (#1) теперь стоит ВНУТРИ h3 перед названием!
         item.innerHTML = `
             <div class="top-main-content">
                 <div class="top-info">
