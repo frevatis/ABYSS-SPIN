@@ -1109,7 +1109,7 @@ body::before {
     margin: 20px 0;
     letter-spacing: -3px;
     background: linear-gradient(135deg, #6c63ff, #00d4ff);
-    -webkit-background-clip: text;
+  
     -webkit-text-fill-color: transparent;
     animation: pulse 3s ease-in-out infinite;
 }
@@ -1739,7 +1739,7 @@ body::before {
     font-size: 48px;
     margin-bottom: 10px;
     background: linear-gradient(135deg, #6c63ff, #00d4ff);
-    -webkit-background-clip: text;
+  
     -webkit-text-fill-color: transparent;
     text-align: center;
 }
@@ -3044,4 +3044,540 @@ body::before {
     background: #00d4ff !important;
     color: #11162c !important;
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+/* ============================================================
+   ЛЕСТНИЦА (ПОЛНАЯ ВЕРСИЯ)
+   ============================================================ */
+.setup-panel {
+    background: rgba(17, 22, 44, 0.8);
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+}
+
+.setup-group {
+    margin-bottom: 25px;
+}
+
+.setup-group label {
+    display: block;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+/* Карточки в списке */
+.ladder-card {
+    background: rgba(17, 22, 44, 0.8);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.ladder-card:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.ladder-card.completed {
+    border-color: #51cf66;
+    background: rgba(81, 207, 102, 0.05);
+}
+
+.ladder-info h3 {
+    margin: 0 0 5px 0;
+    color: #fff;
+    font-size: 18px;
+}
+
+.ladder-info p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ladder-input-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ladder-input {
+    width: 80px;
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(108, 99, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    outline: none;
+}
+
+.btn-save-ladder {
+    background: linear-gradient(135deg, #6c63ff, #00d4ff);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-save-ladder:hover {
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.percent-badge {
+    background: rgba(81, 207, 102, 0.15);
+    color: #51cf66;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+/* Кнопки выбора категории */
+.filter-cat-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Roboto', sans-serif;
+}
+
+.filter-cat-btn:hover {
+    background: rgba(108, 99, 255, 0.15);
+    color: #fff;
+}
+
+.filter-cat-btn.active {
+    background: linear-gradient(135deg, #6c63ff, #00d4ff);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 0 15px rgba(108, 99, 255, 0.4);
+}
+
+/* Красный цвет для активной кнопки Импосиблов */
+.filter-cat-btn[data-filter="impossible"].active {
+    background: linear-gradient(135deg, #ff6b6b, #ff0000);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+/* ============================================================
+   ЖЕСТКИЙ ФИКС КАРТОЧЕК ТОПА
+   ============================================================ */
+.top-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+.top-item {
+    display: flex !important;
+    flex-direction: column !important;
+    background: rgba(17, 22, 44, 0.6);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.top-main-content {
+    display: flex !important;
+    flex-direction: row !important; /* Строго в ряд */
+    justify-content: space-between !important; /* Текст налево, плашки направо */
+    align-items: center !important; /* Выравниваем по центру */
+    width: 100% !important;
+    gap: 15px !important;
+}
+
+.top-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important; /* Текст прижат влево */
+    text-align: left !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.top-info h3 {
+    font-size: 18px !important;
+    color: #fff !important;
+    margin: 0 0 5px 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.top-info p {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.top-stats {
+    display: flex !important;
+    flex-direction: row !important; /* Плашки в один ряд */
+    align-items: center !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Плашки */
+.top-rank, .top-tier {
+    font-family: 'Sansation', sans-serif;
+    padding: 5px 12px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+.top-rank {
+    color: #ffd700 !important;
+    background: rgba(255, 215, 0, 0.1) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.top-tier {
+    color: #00d4ff !important;
+    background: rgba(0, 212, 255, 0.1) !important;
+    border: 1px solid rgba(0, 212, 255, 0.3) !important;
+}
+
+@media (max-width: 768px) {
+    /* Сетка строго в одну колонку */
+    .top-list {
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Карточка жестко по ширине экрана, ничего не вылезет */
+    .top-item {
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important; /* Обрезает всё, что пытается вылезти */
+    }
+
+    /* Главный контейнер */
+    .top-main-content {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important; 
+        align-items: center !important;
+        width: 100% !important;
+        gap: 5px !important;
+    }
+
+    /* Текст (название и автор) */
+    .top-info {
+        flex: 1 !important;
+        min-width: 0 !important; 
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .top-info h3 { font-size: 13px !important; margin-bottom: 2px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+    .top-info p { font-size: 9px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+
+    /* Плашки */
+    .top-stats {
+        display: flex !important;
+        flex-direction: row !important; 
+        align-items: center !important;
+        justify-content: flex-end !important;
+        flex-shrink: 0 !important; /* Плашки не сжимаются */
+        gap: 4px !important;
+    }
+
+    .top-rank, .top-tier {
+        font-size: 10px !important;
+        padding: 3px 6px !important;
+    }
+
+    /* ============================================================
+       СПЕЦИАЛЬНО ДЛЯ ИМПОСИБЛОВ
+       ============================================================ */
+    
+    /* Меняем местами: сначала IMPOSSIBLE, потом #1 */
+    .top-main-content.imp-layout .top-stats {
+        flex-direction: row-reverse !important; 
+    }
+
+    /* Уменьшаем плашки до минимума, чтобы влезли в экран */
+    .top-main-content.imp-layout .top-rank, 
+    .top-main-content.imp-layout .top-tier {
+        font-size: 8px !important; 
+        padding: 3px 5px !important;
+    }
+}
+/* ============================================================
+   ФИНАЛЬНЫЙ ФИКС: ЖЕЛТАЯ ПЛАШКА #1 ВНУТРИ НАЗВАНИЯ
+   ============================================================ */
+
+/* ============================================================
+   ФИКС: ВСЁ В ОДИН СТОЛБИК ДЛЯ СТРАНИЦЫ ТОП ДЕМОНОВ
+   ============================================================ */
+
+/* Применяем стили только если на странице есть topList */
+body:has(#topList) .container {
+    max-width: 900px !important; 
+    width: 100% !important;
+    display: block !important; 
+}
+
+body:has(#topList) .top-list {
+    display: flex !important;
+    flex-direction: column !important; 
+    gap: 15px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+}
+
+body:has(#topList) .top-item {
+    display: flex !important;
+    background: rgba(17, 22, 44, 0.6) !important;
+    border: 1px solid rgba(108, 99, 255, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 18px 25px !important; 
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+body:has(#topList) .top-main-content {
+    display: flex !important;
+    flex-direction: row !important; 
+    justify-content: space-between !important; 
+    align-items: center !important;
+    width: 100% !important;
+    gap: 15px !important;
+}
+
+body:has(#topList) .top-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    flex: 1 !important;
+    min-width: 0 !important; 
+}
+
+body:has(#topList) .top-info h3 {
+    font-size: 18px !important;
+    color: #fff !important;
+    margin: 0 0 5px 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body:has(#topList) .top-info p {
+    font-size: 13px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Желтая плашка #1 */
+body:has(#topList) .top-rank-text {
+    display: inline-block !important;
+    color: #ffd700 !important;
+    background: rgba(255, 215, 0, 0.1) !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    font-family: 'Sansation', sans-serif !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+}
+
+body:has(#topList) .top-stats {
+    display: flex !important;
+    flex-direction: row !important; 
+    align-items: center !important;
+    flex-shrink: 0 !important; 
+}
+
+body:has(#topList) .top-tier {
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    background: rgba(0, 212, 255, 0.1) !important;
+}
+
+@media (max-width: 768px) {
+    body:has(#topList) .top-item {
+        padding: 12px 15px !important; 
+    }
+    
+    body:has(#topList) .top-info h3 { 
+        font-size: 15px !important; 
+        gap: 5px !important;
+    }
+    body:has(#topList) .top-info p { font-size: 10px !important; }
+    
+    body:has(#topList) .top-rank-text {
+        font-size: 11px !important;
+        padding: 2px 6px !important;
+    }
+    
+    body:has(#topList) .top-tier {
+        font-size: 10px !important;
+        padding: 4px 8px !important;
+    }
+}
+/* ============================================================
+   КРАСИВЫЕ КНОПКИ ВЫБОРА СЛОЖНОСТИ
+   ============================================================ */
+
+.category-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+}
+
+.cat-btn {
+    position: relative !important;
+    padding: 22px 20px !important;
+    background: rgba(17, 22, 44, 0.6) !important;
+    border: 2px solid rgba(108, 99, 255, 0.2) !important;
+    border-radius: 16px !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    font-family: 'Sansation', sans-serif !important;
+    cursor: pointer !important;
+    transition: all 0.4s ease !important;
+    backdrop-filter: blur(10px) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Блик при наведении (эффект стекла) */
+.cat-btn::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 50% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent) !important;
+    transform: skewX(-25deg) !important;
+    transition: left 0.6s ease !important;
+}
+
+.cat-btn:hover::before {
+    left: 200% !important;
+}
+
+.cat-btn:hover {
+    transform: translateY(-5px) scale(1.02) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ============================================================
+   ИНДИВИДУАЛЬНЫЕ ЦВЕТА ДЛЯ КАЖДОЙ СЛОЖНОСТИ
+   ============================================================ */
+
+/* Easy - Зеленый */
+.cat-btn[data-cat="easy"] { border-color: rgba(81, 207, 102, 0.4) !important; color: #51cf66 !important; }
+.cat-btn[data-cat="easy"]:hover { border-color: #51cf66 !important; box-shadow: 0 0 25px rgba(81, 207, 102, 0.4) !important; }
+
+/* Medium - Желтый */
+.cat-btn[data-cat="medium"] { border-color: rgba(252, 196, 25, 0.4) !important; color: #fcc419 !important; }
+.cat-btn[data-cat="medium"]:hover { border-color: #fcc419 !important; box-shadow: 0 0 25px rgba(252, 196, 25, 0.4) !important; }
+
+/* Hard - Оранжевый */
+.cat-btn[data-cat="hard"] { border-color: rgba(255, 146, 43, 0.4) !important; color: #ff922b !important; }
+.cat-btn[data-cat="hard"]:hover { border-color: #ff922b !important; box-shadow: 0 0 25px rgba(255, 146, 43, 0.4) !important; }
+
+/* Insane - Красный */
+.cat-btn[data-cat="insane"] { border-color: rgba(240, 101, 149, 0.4) !important; color: #f06595 !important; }
+.cat-btn[data-cat="insane"]:hover { border-color: #f06595 !important; box-shadow: 0 0 25px rgba(240, 101, 149, 0.4) !important; }
+
+/* Extreme - Темно-красный */
+.cat-btn[data-cat="extreme"] { border-color: rgba(255, 107, 107, 0.4) !important; color: #ff6b6b !important; }
+.cat-btn[data-cat="extreme"]:hover { border-color: #ff6b6b !important; box-shadow: 0 0 25px rgba(255, 107, 107, 0.4) !important; }
+
+/* Hard Extreme - Ярко-красный */
+.cat-btn[data-cat="hardextreme"] { border-color: rgba(255, 0, 0, 0.5) !important; color: #ff0000 !important; }
+.cat-btn[data-cat="hardextreme"]:hover { border-color: #ff0000 !important; box-shadow: 0 0 25px rgba(255, 0, 0, 0.5) !important; }
+
+/* Top 100 - Золотой */
+.cat-btn[data-cat="top100"] { border-color: rgba(255, 215, 0, 0.5) !important; color: #ffd700 !important; }
+.cat-btn[data-cat="top100"]:hover { border-color: #ffd700 !important; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5) !important; }
+
+/* Impossible - Фиолетовый/Черный */
+.cat-btn[data-cat="impossible"] { border-color: rgba(138, 43, 226, 0.5) !important; color: #8a2be2 !important; }
+.cat-btn[data-cat="impossible"]:hover { border-color: #8a2be2 !important; box-shadow: 0 0 25px rgba(138, 43, 226, 0.5) !important; }
+
+/* All Demons - Голубой (как основной цвет сайта) */
+.cat-btn[data-cat="all"] { border-color: rgba(0, 212, 255, 0.4) !important; color: #00d4ff !important; }
+.cat-btn[data-cat="all"]:hover { border-color: #00d4ff !important; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4) !important; }
+
+/* Убираем старые инлайн-стили для кнопок, чтобы они не мешали новым цветам */
+.cat-btn[style*="border-color"] {
+    border-color: inherit !important;
+}
+.cat-btn i {
+    font-size: 20px !important;
+    transition: transform 0.3s ease !important;
+}
+
+.cat-btn:hover i {
+    transform: scale(1.2) rotate(5deg) !important; /* Иконка чуть увеличивается при наведении */
+}
+body {
+    transition: transform 0.5s ease;
+}
+
+#wheelResultBlock {
+    position: relative !important;
+    left: 16px !important; /* Сдвигаем вправо на 20 пикселей */
 }
