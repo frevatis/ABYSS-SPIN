@@ -554,10 +554,23 @@ if (copyIdBtn && resId) {
 // ==========================================
 
     spinBtn.addEventListener('click', () => {
+    // ЖЕСТКИЙ ЦЕНТР ДЛЯ ТЕЛЕФОНА
+    if (window.innerWidth <= 768) {
+        const wheelContainer = document.querySelector('.wheel-container');
+        if (wheelContainer) {
+            wheelContainer.style.marginLeft = 'auto';
+            wheelContainer.style.marginRight = 'auto';
+            wheelContainer.style.transform = 'none'; // Убираем сдвиг влево
+        }
+        
+        spinBtn.style.marginTop = '70px'; // Отодвигаем кнопку от колеса
+        spinBtn.style.marginBottom = '20px';
+        spinBtn.style.transform = 'none'; // Убираем сдвиги кнопки
+    }
     // СБРОС УБЕГАЮЩЕЙ КНОПКИ (чтобы она вернулась на место)
    spinBtn.style.transform = 'none'; 
     spinBtn.style.position = 'relative'; 
-    spinBtn.style.marginTop = '0px'; 
+spinBtn.style.marginTop = window.innerWidth <= 768 ? '40px' : '0px';
 
   
     // ... дальше твой код (if (window.runawayBtn) ...)
@@ -591,6 +604,17 @@ if (copyIdBtn && resId) {
     }
 
     if (window.stillCount > 0) window.stillCount--;
+        // ЖЕСТКИЙ СБРОС СТИЛЕЙ ДЛЯ ТЕЛЕФОНА
+    const wheelContainer = document.querySelector('.wheel-container');
+    if (wheelContainer) {
+        wheelContainer.style.transform = 'none'; // Убираем сдвиг колеса
+        wheelContainer.style.position = 'relative';
+        wheelContainer.style.left = '0'; // Ставим на место
+    }
+    
+    spinBtn.style.marginTop = '30px'; // Отодвигаем кнопку вниз
+    spinBtn.style.marginLeft = '0';   // Убираем сдвиг влево
+    spinBtn.style.transform = 'none'; // Убираем все сдвиги
     isSpinning = true; spinBtn.disabled = true;
     resultBlock.classList.remove('show');
     const wheelResultBlock = document.getElementById('wheelResultBlock');
