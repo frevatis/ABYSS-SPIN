@@ -64,22 +64,44 @@
             </p>
 
             <div class="category-grid">
-                <button class="cat-btn" data-cat="easy">Easy Demon</button>
-                <button class="cat-btn" data-cat="medium">Medium Demon</button>
-                <button class="cat-btn" data-cat="hard">Hard Demon</button>
-                <button class="cat-btn" data-cat="insane">Insane Demon</button>
-                <button class="cat-btn" data-cat="extreme">Extreme Demon</button>
-                <button class="cat-btn" data-cat="hardextreme" style="border-color: #ff6b6b; color: #ff6b6b;">Hard
-                    Extreme Demon</button>
+                <button class="cat-btn" data-cat="easy">
+                    <i class="fa-solid fa-leaf"></i> Easy Demon
+                </button>
+                <button class="cat-btn" data-cat="medium">
+                    <i class="fa-solid fa-shield-halved"></i> Medium Demon
+                </button>
+                <button class="cat-btn" data-cat="hard">
+                    <i class="fa-solid fa-fire"></i> Hard Demon
+                </button>
+                <button class="cat-btn" data-cat="insane">
+                    <i class="fa-solid fa-brain"></i> Insane Demon
+                </button>
+                <button class="cat-btn" data-cat="extreme">
+                    <i class="fa-solid fa-skull"></i> Extreme Demon
+                </button>
+                <button class="cat-btn" data-cat="hardextreme">
+                    <i class="fa-solid fa-fire-flame-curved"></i> Hard Extreme Demon
+                </button>
                 <!-- НОВАЯ КАТЕГОРИЯ ТОП-100 -->
-                <button class="cat-btn" data-cat="top100"
-                    style="border-color: #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);">
+                <button class="cat-btn" data-cat="top100">
                     <i class="fa-solid fa-crown"></i> Top 100 demons
                 </button>
-                <button class="cat-btn" data-cat="all">All demons</button>
-                <button class="cat-btn secret-ninja-btn" id="ninjaBtn">Секрет?</button>
+                <button class="cat-btn" data-cat="impossible">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Impossible
+                </button>
+                <button class="cat-btn" data-cat="all">
+                    <i class="fa-solid fa-dice"></i> All demons
+                </button>
+                <button class="cat-btn" data-cat="chaos"
+                    style="border-color: #9b59b6; color: #9b59b6; box-shadow: 0 0 15px rgba(155, 89, 182, 0.3);">
+                    <i class="fa-solid fa-shuffle"></i> CHAOS MODE
+                </button>
 
+                <!-- Кнопку "Секрет?" не трогаем, она останется скрытой -->
+                <button class="cat-btn secret-ninja-btn" id="ninjaBtn">Секрет?</button>
             </div>
+
+
         </div>
     </div>
 
@@ -101,8 +123,26 @@
                     <span class="stat-value highlight" id="targetText">1%</span>
                 </div>
             </div>
+            <!-- ИСТОРИЯ ЭФФЕКТОВ -->
+            <div id="chaosHistoryBlock"
+                style="display: none; margin-bottom: 20px; text-align: center; background: rgba(17,22,44,0.6); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(155,89,182,0.3);">
+                <p
+                    style="margin: 0 0 5px 0; font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px;">
+                    Прошлый эффект:</p>
+                <div id="prevEffectText" style="font-size: 14px; color: #9b59b6; margin-bottom: 10px;">—</div>
+
+                <p
+                    style="margin: 0 0 5px 0; font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px;">
+                    Текущий эффект:</p>
+                <div id="currEffectText" style="font-size: 16px; font-weight: bold; color: #ffd700;">—</div>
+            </div>
 
             <h2 class="h2" id="currentCategoryTitle">Категория: Все</h2>
+            <div id="impossibleRules"
+                style="display: none; text-align: center; margin-bottom: 20px; background: rgba(255,0,0,0.1); border: 1px solid #ff0000; padding: 10px; border-radius: 8px; color: #ff6b6b;">
+                <i class="fa-solid fa-triangle-exclamation"></i> <b>Условия:</b> Разрешен спидхак! Проходить уровни
+                можно с замедлением.
+            </div>
 
             <div class="wheel-container">
                 <div class="pointer"></div>
@@ -152,19 +192,31 @@
                         <span id="resSkips" style="font-weight: 700; color: #ff6b6b;">5</span>
                     </div>
 
-                    <!-- ОТМЕНЫ -->
-                    <div class="res-skips-info"
-                        style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
-                        <span style="font-size: 14px; color: rgba(255,255,255,0.5);">Отмен:</span>
-                        <span id="resUndos" style="font-weight: 700; color: #ffa500;">2</span>
-                    </div>
+
 
                     <!-- КНОПКА ОТМЕНЫ -->
-                    <button id="undoBtn" class="btn-undo" style="display: none;">Отмена</button>
 
                     <button id="skipBtn" class="btn-skip">Скип</button>
                     <button id="saveBtn" class="btn-save">Сохранить</button>
                 </div>
+                <div id="secondDemonBlock" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed rgba(155,89,182,0.5);">
+    <p style="color: #9b59b6; font-weight: bold; margin-bottom: 10px; text-align: center;">ВТОРОЙ ДЕМОН (двойной спин)</p>
+    <div class="res-header" style="border-bottom: none; padding-bottom: 5px; margin-bottom: 10px;">
+        <h3 id="resName2" style="font-size: 20px;">Название</h3>
+        <span class="res-tier" id="resTier2" style="background: rgba(155,89,182,0.15); color: #9b59b6; border-color: #9b59b6;">Tier: 0.00</span>
+    </div>
+    <div class="res-info" style="margin-bottom: 15px;">
+        <p>Создатель: <span id="resCreator2">Автор</span></p>
+        <p>ID уровня: <span id="resId2">123456</span></p>
+    </div>
+    <div class="res-actions" style="margin-top: 10px;">
+        <div class="progress-input">
+            <label>Пройти минимум: <span id="goalLabel2">1</span>%</label>
+            <input type="text" id="progressInput2" placeholder="Например: 5">
+        </div>
+        <button id="saveSecondBtn" class="btn-save" style="width: 100%; margin-top: 10px;">Сохранить второго</button>
+    </div>
+</div>
             </div>
 
             <!-- БЛОК ПРОШЛОГО ПРОГРЕССА -->
@@ -271,6 +323,25 @@
     <!-- СКРИПТЫ -->
     <script src="global.js"></script>
     <script src="script.js"></script>
+
+    <!-- МОДАЛЬНОЕ ОКНО ХАОСА -->
+    <div id="chaosModal" class="modal-overlay" style="z-index: 10000;">
+        <div class="modal-box"
+            style="border-color: #9b59b6; box-shadow: 0 0 50px rgba(155, 89, 182, 0.5); text-align: center;">
+            <div class="modal-icon" id="chaosIcon"
+                style="color: #9b59b6; filter: drop-shadow(0 0 20px rgba(155, 89, 182, 0.8)); font-size: 50px; transition: 0.3s;">
+                <i class="fa-solid fa-dice"></i>
+            </div>
+            <h3 style="font-family: 'Sansation', sans-serif; font-size: 28px; color: #fff; margin-bottom: 10px;">РУЛЕТКА
+                ПРИКОЛОВ!</h3>
+            <p id="chaosText" style="font-size: 20px; color: #9b59b6; font-weight: bold; margin-bottom: 20px;">...</p>
+
+            <!-- КНОПКА ЗАКРЫТИЯ -->
+            <button id="chaosOkBtn" class="btn-save"
+                style="width: 100%; padding: 14px; font-size: 16px; background: linear-gradient(90deg, #9b59b6, #8e44ad); box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);">ПРИНЯТЬ
+                СУДЬБУ</button>
+        </div>
+    </div>
 </body>
 
 </html>

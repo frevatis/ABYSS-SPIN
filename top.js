@@ -1,46 +1,99 @@
-let top100Demons = [];
+let allDemons = [];
+let currentCategory = 'extreme'; // По умолчанию Экстримы
 
-fetch('demons.json')
+// Загрузка
+fetch('/demons.json')
     .then(res => res.json())
     .then(data => {
-        const normalized = data.map(d => ({
-            Name: d.name || d.Name,
-            Creator: d.creator || d.Creator,
-            ID: d.id || d.ID,
-            Tier: d.tier || d.Tier,
-            Top: d.top || null
-        }));
+        allDemons = data.map(d => {
+            let rawTier = d.tier || d.Tier;
+            let finalTier = (rawTier === 'imposible' || rawTier === 'impossible') ? 99 : Number(rawTier);
+            let finalTop = d.top || d.Top || d.Impossible_Top || null;
 
-        top100Demons = normalized.filter(d => d.Top !== null);
-        top100Demons.sort((a, b) => a.Top - b.Top);
-        renderList(top100Demons);
-    })
-    .catch(err => console.error('Ошибка загрузки:', err));
+            return {
+                Name: d.name || d.Name,
+                Creator: d.creator || d.Creator,
+                ID: d.id || d.ID,
+                Tier: finalTier,
+                Top: finalTop
+            };
+        });
+        
+        // ВОТ ТУТ ДЕЛАЕМ КНОПКУ АКТИВНОЙ ПРИ ЗАГРУЗКЕ
+        document.querySelectorAll('.filter-cat-btn').forEach(b => b.classList.remove('active'));
+        const defaultBtn = document.querySelector(`.filter-cat-btn[data-filter="extreme"]`);
+        if (defaultBtn) defaultBtn.classList.add('active');
 
-function renderList(demonsToRender) {
+        renderList();
+    });
+
+// Переключение категорий
+document.querySelectorAll('.filter-cat-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-cat-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentCategory = e.target.dataset.filter;
+        renderList();
+    });
+});
+
+function renderList() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    const searchType = document.getElementById('searchType').value;
+    
+    // 1. Фильтр по категории
+    let filtered = [];
+    if (currentCategory === 'top') {
+        filtered = allDemons.filter(d => d.Top !== null && d.Top <= 100).sort((a,b) => a.Top - b.Top);
+    } else if (currentCategory === 'extreme') {
+        filtered = allDemons.filter(d => d.Tier > 20 && d.Tier < 99).sort((a,b) => b.Tier - a.Tier);
+    } else if (currentCategory === 'impossible') {
+        filtered = allDemons.filter(d => d.Tier === 99);
+    }
+
+    // 2. Поиск
+    if (query !== '') {
+        filtered = filtered.filter(d => {
+            if (searchType === 'name') return d.Name.toLowerCase().includes(query);
+            if (searchType === 'creator') return d.Creator.toLowerCase().includes(query);
+            if (searchType === 'id') return String(d.ID).includes(query);
+            if (searchType === 'tier') return String(d.Tier).includes(query);
+            if (searchType === 'top') return String(d.Top).includes(query);
+            // all
+            return d.Name.toLowerCase().includes(query) || d.Creator.toLowerCase().includes(query) || String(d.ID).includes(query);
+        });
+    }
+
+    // 3. Отрисовка
     const container = document.getElementById('topList');
     container.innerHTML = '';
 
-    if (demonsToRender.length === 0) {
+    if (filtered.length === 0) {
         container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; width: 100%; padding: 20px;">Ничего не найдено :(</p>';
         return;
     }
 
-    demonsToRender.forEach((demon) => {
+    filtered.forEach((demon) => {
         const item = document.createElement('div');
         item.className = 'top-item';
         
-        const place = demon.Top;
-        const tier = Number(demon.Tier).toFixed(1);
+        const isImp = demon.Tier === 99;
+        const tierText = isImp ? 'IMPOSSIBLE' : demon.Tier.toFixed(1);
+        const tierColor = isImp ? '#ff0000' : '#00d4ff';
+        
+        // Если топа нет, ставим прочерк, иначе #номер
+        const place = demon.Top ? `#${demon.Top}` : '-';
 
+        // ВОТ ТУТ МАГИЯ: Топ (#1) теперь стоит ВНУТРИ h3 перед названием!
         item.innerHTML = `
-            <div class="top-info">
-                <h3>#${place} ${demon.Name}</h3>
-                <p>Автор: ${demon.Creator} | ID: ${demon.ID}</p>
-            </div>
-            <div class="top-stats">
-                <span class="top-rank">#${place}</span>
-                <span class="top-tier">${tier}</span>
+            <div class="top-main-content">
+                <div class="top-info">
+                    <h3><span class="top-rank-text">${place}</span> ${demon.Name}</h3>
+                    <p>Автор: ${demon.Creator} | ID: ${demon.ID}</p>
+                </div>
+                <div class="top-stats">
+                    <span class="top-tier" style="color: ${tierColor}; border-color: ${tierColor};">${tierText}</span>
+                </div>
             </div>
         `;
         
@@ -48,63 +101,6 @@ function renderList(demonsToRender) {
     });
 }
 
-// ==========================================
-// ЛОГИКА ПОИСКА С ВЫБОРОМ ТИПА
-// ==========================================
-const searchInput = document.getElementById('searchInput');
-const searchType = document.getElementById('searchType');
-
-function performSearch() {
-    const query = searchInput.value.toLowerCase().trim();
-    const type = searchType.value;
-
-    if (query === '') {
-        renderList(top100Demons);
-        return;
-    }
-
-    const filtered = top100Demons.filter(d => {
-        if (type === 'all') {
-            return d.Name.toLowerCase().includes(query) || 
-                   d.Creator.toLowerCase().includes(query) || 
-                   String(d.ID).includes(query) ||
-                   String(d.Tier).includes(query) ||
-                   String(d.Top) === query;
-        }
-        if (type === 'name') return d.Name.toLowerCase().includes(query);
-        if (type === 'creator') return d.Creator.toLowerCase().includes(query);
-        if (type === 'id') return String(d.ID).includes(query);
-        if (type === 'tier') return String(d.Tier).includes(query);
-        if (type === 'top') return String(d.Top) === query;
-        return false;
-    });
-
-    renderList(filtered);
-}
-
-// Слушаем ввод текста и изменение выпадающего списка
-searchInput.addEventListener('input', performSearch);
-searchType.addEventListener('change', performSearch);
-// ==========================================
-// КНОПКА "НАВЕРХ"
-// ==========================================
-const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-if (scrollTopBtn) {
-    window.addEventListener('scroll', () => {
-        // Если прокрутили вниз больше 300px - показываем кнопку
-        if (window.scrollY > 300) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-    });
-
-    // При клике плавно скроллим наверх
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-}
+// Поиск
+document.getElementById('searchInput').addEventListener('input', renderList);
+document.getElementById('searchType').addEventListener('change', renderList);
