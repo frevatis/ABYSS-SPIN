@@ -587,16 +587,20 @@ winOkBtn.addEventListener('click', () => {
 // ==========================================
 // КНОПКА ОТМЕНЫ (ВЕРНУТЬСЯ)
 // ==========================================
+
+// ==========================================
+// КНОПКА ОТМЕНЫ (ВЕРНУТЬСЯ)
+// ==========================================
 if (undoBtn) {
     undoBtn.addEventListener('click', () => {
-        if (undosLeft <= 0) return; // Если отмен нет - ничего не делаем
+        if (undosLeft <= 0) return; 
         if (!previousState) return;
 
-        undosLeft--; // Тратим одну отмену
+        undosLeft--; 
 
-        // Возвращаем переменные
+        // ВОЗВРАЩАЕМ ТОЛЬКО ЦЕЛЬ И ИСТОРИЮ, РЕКОРД НЕ ТРОГАЕМ!
         currentTarget = previousState.target;
-        personalBest = previousState.best;
+        // personalBest = previousState.best;  <--- УДАЛИЛИ ЭТУ СТРОЧКУ
         historyVal = previousState.historyVal;
         currentDemon = null; 
         
@@ -609,17 +613,12 @@ if (undoBtn) {
         wheel.style.transition = 'none'; 
         currentRotation = 0; 
         wheel.style.transform = 'rotate(0deg)';
-            // СЧЕТЧИК СПИНОВ
-    let currentSpins = parseInt(localStorage.getItem('totalSpins')) || 0;
-    currentSpins++;
-    localStorage.setItem('totalSpins', currentSpins);
+        
         const pool = filterDemons(selectedCategory);
         if (pool.length >= 8) drawWheel([...pool].sort(() => Math.random() - 0.5).slice(0, 8));
         
-        // ВОТ ЭТА СТРОЧКА (плавный скролл вверх)
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
 
-        // Сохраняем откат
         saveGame(); 
     });
 }
