@@ -702,13 +702,21 @@ spinBtn.style.marginTop = window.innerWidth <= 768 ? '40px' : '0px';
     }, 4200);
 });
 
-// ==========================================
-// СОХРАНЕНИЕ ПРОЦЕНТА
-// ==========================================
+
 saveBtn.addEventListener('click', () => {
-    if (window.fakeSave) {
-        window.fakeSave = false;
+    // 1. ФЕЙК
+    if (window.isFakeSave) {
+        window.isFakeSave = false;
         return showMessage('ОБМАНКА!', 'Кнопка исчезла! Попробуй еще раз.', 'fa-ghost', '#9b59b6');
+    }
+
+    // 2. ЗАВИСАНИЕ (5 секунд)
+    if (window.freezeSave) {
+        window.freezeSave = false;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = 'Зависло...';
+        setTimeout(() => { saveBtn.disabled = false; saveBtn.innerHTML = 'Сохранить'; }, 5000);
+        return showMessage('ЗАВИСАНИЕ!', 'Кнопка не работает 5 секунд...', 'fa-hourglass-half', '#00d4ff');
     }
 
     previousState = { demon: currentDemon, target: currentTarget, best: personalBest, historyVal: historyVal };
@@ -767,7 +775,6 @@ saveBtn.addEventListener('click', () => {
 
     saveActualProgress(val);
 });
-
 function saveActualProgress(val) {
     const demonName = currentDemon.Name; historyVal = val; currentDemon = null; consecutiveSkips = 0; isPoisoned = false; updateSkipButton();
     if (devilDebt > 0) {
